@@ -1,0 +1,44 @@
+<div class="admin-container">
+    <div class="card admin-card">
+        <div class="admin-header">
+            <h1><i class="fas fa-cogs"></i> Админ-панель</h1>
+            <div class="header-actions">
+                <a href="/profile" class="btn btn-primary">
+                    <i class="fas fa-user"></i> Мой профиль
+                </a>
+                <a href="/logout" class="btn btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Выйти
+                </a>
+            </div>
+        </div>
+        
+        <div class="admin-content">
+            <h2 style="margin-bottom: 20px;">Список пользователей</h2>
+            
+            <% if (locals.users && locals.users.length > 0) { %>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Логин</th>
+                            <th>Роль</th>
+                            <th>Дата регистрации</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% locals.users.forEach(user => { %>
+                            <tr>
+                                <td><%= user.id %></td>
+                                <td><%= user.login %></td>
+                                <td><%= user.role %></td>
+                                <td><%= new Date(user.createdAt).toLocaleDateString('ru-RU') %></td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <p>Нет зарегистрированных пользователей</p>
+            <% } %>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+<div class="profile-container">
+    <div class="card profile-card">
+        <div class="profile-header">
+            <div class="profile-avatar">
+                <%= locals.user.login.charAt(0).toUpperCase() %>
+            </div>
+            <h2>Добро пожаловать, <%= locals.user.login %>!</h2>
+            <div class="profile-role role-<%= locals.user.role === 'Админ' ? 'admin' : 'user' %>">
+                <%= locals.user.role %>
+            </div>
+        </div>
+        
+        <div class="profile-details">
+            <div class="detail-item">
+                <span class="detail-label">Логин:</span>
+                <span class="detail-value"><%= locals.user.login %></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Роль:</span>
+                <span class="detail-value"><%= locals.user.role %></span>
+            </div>
+        </div>
+        
+        <div class="profile-actions">
+            <% if (locals.user.role === 'Админ') { %>
+                <a href="/admin" class="btn btn-primary admin-btn">
+                    <i class="fas fa-cogs"></i> Админ-панель
+                </a>
+            <% } %>
+            <a href="/logout" class="btn btn-danger logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Выйти
+            </a>
+        </div>
+    </div>
+</div>

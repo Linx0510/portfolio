@@ -1,0 +1,32 @@
+<div class="register-container">
+    <div class="card register-card">
+        <div class="register-header">
+            <h1>Регистрация</h1>
+        </div>
+        
+        <% if (locals.error) { %>
+            <div class="alert alert-error">
+                <i class="fas fa-exclamation-circle"></i> <%= locals.error %>
+            </div>
+        <% } %>
+        
+        <form method="POST" action="/register" class="register-form">
+            <div class="form-group">
+                <label for="login">Логин:</label>
+                <input type="text" id="login" name="login" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Пароль:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <button type="submit" class="btn btn-secondary register-btn">Зарегистрироваться</button>
+        </form>
+        
+        <div class="register-footer">
+            <p>Уже есть аккаунт?</p>
+            <a href="/login" class="login-link">Войти</a>
+        </div>
+    </div>
+</div>

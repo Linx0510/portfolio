@@ -1,0 +1,24 @@
+{
+  "name": "aut",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "body-parser": "^2.2.1",
+    "ejs": "^3.1.10",
+    "express": "^5.2.1",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.18.2",
+    "path": "^0.12.7",
+    "sequelize": "^6.37.7",
+    "sqlite3": "^5.1.7",
+    "url": "^0.11.4"
+  }
+}

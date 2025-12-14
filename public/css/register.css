@@ -1,0 +1,178 @@
+/* Специфичные стили для страницы регистрации */
+.register-container {
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+}
+
+.register-card {
+    padding: 50px 40px;
+}
+
+.register-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.register-header h1 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 10px;
+    background: linear-gradient(to right, #48bb78, #38a169);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.register-header p {
+    color: #666;
+    font-size: 16px;
+}
+
+.register-form .form-group {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.register-form label {
+    color: #48bb78;
+    font-weight: 700;
+}
+
+.register-form input {
+    padding-left: 45px;
+    border-color: #c6f6d5;
+    background: #f0fff4;
+}
+
+.register-form input:focus {
+    border-color: #48bb78;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.2);
+}
+
+.register-form .input-icon {
+    position: absolute;
+    left: 15px;
+    top: 40px;
+    color: #48bb78;
+    font-size: 18px;
+}
+
+.register-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 16px;
+    font-size: 16px;
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    position: relative;
+    overflow: hidden;
+}
+
+.register-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.register-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.register-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(72, 187, 120, 0.4);
+}
+
+.register-btn:active {
+    transform: translateY(0);
+}
+
+.register-footer {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.login-link {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 12px 30px;
+    background: #f8f9fa;
+    border: 2px solid #48bb78;
+    color: #48bb78;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.login-link:hover {
+    background: #48bb78;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.password-strength {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #666;
+}
+
+.password-strength.weak {
+    color: #f56565;
+}
+
+.password-strength.medium {
+    color: #ed8936;
+}
+
+.password-strength.strong {
+    color: #48bb78;
+}
+
+.terms {
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.terms a {
+    color: #48bb78;
+    text-decoration: none;
+}
+
+.terms a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+    .register-card {
+        padding: 30px 20px;
+    }
+    
+    .register-header h1 {
+        font-size: 24px;
+    }
+    
+    .register-btn {
+        padding: 14px;
+        font-size: 14px;
+    }
+}
