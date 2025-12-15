@@ -4,7 +4,11 @@
             <h1>ВХОД</h1>
         </div>
         
-   
+        <% if (locals.registered) { %>
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i> Регистрация успешна! Теперь вы можете войти.
+            </div>
+        <% } %>
         
         <% if (locals.error) { %>
             <div class="alert alert-error">

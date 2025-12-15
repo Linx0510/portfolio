@@ -5,192 +5,211 @@
     padding: 0;
     box-sizing: border-box;
 }
+@font-face {
+    font-family: "Montserrat";
+    src: url(/fonts/Montserrat-Regular.ttf);
+    font-weight: 400;
+}
+@font-face {
+    font-family: "Montserrat";
+    src: url(/public/fonts/Montserrat-Medium.ttf);
+    font-weight: 500;
+}
+@font-face {
+    font-family: "Montserrat";
+    src: url(/public/fonts/Montserrat-SemiBold.ttf);
+    font-weight: 600;
+}
+@font-face {
+    font-family: "Montserrat";
+    src: url(/public/fonts/Montserrat-Bold.ttf);
+    font-weight: 700;
+}
+@font-face {
+    font-family: "Montserrat";
+    src: url(/public/fonts/Montserrat-ExtraBold.ttf);
+    font-weight: 800;
+}
+@font-face {
+    font-family: "Montserrat";
+    src: url(/public/fonts/Montserrat-Black.ttf);
+    font-weight: 900;
+}
+@font-face {
+    font-family: "Inter";
+    src: url(/public/fonts/Inter-VariableFont_opsz\,wght.ttf);
+    font-weight: 900;
+}
+@font-face {
+    font-family: "Street";
+    src: url(/public/fonts/19012.ttf);
+}
+@font-face {
+    font-family: "SimpleTags";
+    src: url(/public/fonts/F563-Regular.ttf);
+}
+:root {
+    --accent: #3DCC0D;
+    --white: #F0F0F0;
+    --black: #000000;
+    --gray: #D9D9D9;
+    --accent2: #6AA656;
+    --bg2: #151515;
+    --bg_input: #222222;
+    --stroke_input: #333333;
+    --text: #EEEEEE;
+
+}
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+    margin: 0;
+   background-color: var(--black);
 }
+ body {
+            display: flex;
+            margin: 0;
+        }
+        
+        aside {
+            width: 235px;
+            background-color: var(--bg2);
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+            z-index: 1000;
+            padding:  18px 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            min-height: 100vh;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            margin-top: 20px;
+            margin-right: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo h1{
+            font-size: 34px;
+            font-family: "Inter";
+            color: var(--gray);
+        }
+        
+        
+        .nav-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .contacts-section{
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        
+        .nav-link {
+            display: flex;
+            width: fit-content;
+            padding: 5px 5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .nav-link-contact{
+            display: flex;
+            width: 100%;
+            padding: 5px 5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            gap: 10px;
+            background: none;
+            border: none;
 
-.container {
-    width: 100%;
-    max-width: 1200px;
-}
-
-.card {
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    overflow: hidden;
-}
-
-h1, h2, h3 {
-    color: #333;
-    margin-bottom: 20px;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-label {
-    display: block;
-    margin-bottom: 8px;
-    color: #555;
-    font-weight: 600;
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-input, select {
-    width: 100%;
-    padding: 12px 15px;
-    border: 2px solid #e1e5e9;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: all 0.3s ease;
-    background: #f8f9fa;
-}
-
-input:focus, select:focus {
-    outline: none;
-    border-color: #667eea;
-    background: white;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.btn {
-    padding: 14px 30px;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    display: inline-block;
-    text-align: center;
-    text-decoration: none;
-}
-
-.btn-primary {
-    background: linear-gradient(to right, #667eea, #764ba2);
-    color: white;
-}
-
-.btn-primary:hover {
-    background: linear-gradient(to right, #5a67d8, #6b46c1);
-    transform: translateY(-2px);
-    box-shadow: 0 7px 14px rgba(102, 126, 234, 0.4);
-}
-
-.btn-secondary {
-    background: linear-gradient(to right, #48bb78, #38a169);
-    color: white;
-}
-
-.btn-secondary:hover {
-    background: linear-gradient(to right, #38a169, #2f855a);
-    transform: translateY(-2px);
-    box-shadow: 0 7px 14px rgba(72, 187, 120, 0.4);
-}
-
-.btn-danger {
-    background: linear-gradient(to right, #f56565, #e53e3e);
-    color: white;
-}
-
-.btn-danger:hover {
-    background: linear-gradient(to right, #e53e3e, #c53030);
-    transform: translateY(-2px);
-    box-shadow: 0 7px 14px rgba(245, 101, 101, 0.4);
-}
-
-.alert {
-    padding: 15px 20px;
-    border-radius: 8px;
-    margin-bottom: 25px;
-    font-weight: 500;
-    animation: slideIn 0.3s ease;
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.alert-success {
-    background: linear-gradient(to right, #c6f6d5, #9ae6b4);
-    color: #22543d;
-    border-left: 4px solid #48bb78;
-}
-
-.alert-error {
-    background: linear-gradient(to right, #fed7d7, #fc8181);
-    color: #742a2a;
-    border-left: 4px solid #f56565;
-}
-
-.links {
-    text-align: center;
-    margin-top: 25px;
-    padding-top: 25px;
-    border-top: 1px solid #e1e5e9;
-}
-
-.links a {
-    color: #667eea;
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s ease;
-}
-
-.links a:hover {
-    color: #5a67d8;
-    text-decoration: underline;
-}
-
-/* Анимации */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.card {
-    animation: fadeIn 0.6s ease-out;
-}
-
-/* Адаптивность */
-@media (max-width: 768px) {
-    .container {
-        padding: 10px;
-    }
+        }
+        .nav-link:hover,
+        .nav-link-contact:hover {
+            border-bottom: 1px solid var(--accent);
+        }
+        .nav-link:hover>span,
+        .nav-link-contact:hover>span{
+            color: var(--accent);
+        }
+        .nav-link-contact:hover>svg>path{
+            stroke: var(--accent);
+        }
+      
     
-    .btn {
-        padding: 12px 20px;
-        font-size: 14px;
+        
+        .nav-link span {
+            width: auto;
+            font-family: "Montserrat";
+            font-weight: 500 ;
+            color: var(--gray);
+            font-size: 16px;
+        }
+        .nav-link-contact span {
+            width: auto;
+            font-family: "Montserrat";
+            font-weight: 500 ;
+            color: var(--gray);
+            font-size: 14px;
+        }
+        
+        .user-info {
+            display: flex;
+            gap: 5px;
+            width: 100%;
+        }
+        .user_name{
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            width: 100%;
+        }
+        .user_full_name{
+            font-size: 16px;
+            font-family: "Montserrat";
+            font-weight: 900;
+            color: var(--white);
+        }
+        .user_email{
+            font-size: 12px;
+            font-family: "Montserrat";
+            font-weight: 700;
+            color: #767676;
+        }
+        .user_role{
+            display: flex;
+            width: 100%;
+            border-radius: 15px;
+            padding: 5px 5px;
+            align-items: center;
+            justify-content: center;
+        }
+        .user_role>p{
+            font-size: 10px;
+            font-family: "Montserrat";
+            font-weight: 700;
+            color: var(--white);
+        }
+        .user_role.role-admin{
+            background-color: var(--accent2);
+        }
+        .user_role.role-user{
+            background-color: #D7A03A;
+        }
+    .form_out{
+        display: flex;
+        padding: 10px 0px;
+        border-top: 1px solid var(--gray);
     }
-    
-    input, select {
-        padding: 10px 12px;
-        font-size: 14px;
-    }
-}
+       
