@@ -1,19 +1,85 @@
-/* Специфичные стили для страницы входа */
+
+/* Общие стили для всех страниц */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+@font-face {
+    font-family: "Montserrat";
+    src: url(/fonts/Montserrat-Regular.ttf);
+    font-weight: 400;
+}
+@font-face {
+    font-family: "Montserrat";
+    src: url(/public/fonts/Montserrat-Medium.ttf);
+    font-weight: 500;
+}
+@font-face {
+    font-family: "Montserrat";
+    src: url(/public/fonts/Montserrat-SemiBold.ttf);
+    font-weight: 600;
+}
+@font-face {
+    font-family: "Montserrat";
+    src: url(/public/fonts/Montserrat-Bold.ttf);
+    font-weight: 700;
+}
+@font-face {
+    font-family: "Montserrat";
+    src: url(/public/fonts/Montserrat-ExtraBold.ttf);
+    font-weight: 800;
+}
+@font-face {
+    font-family: "Montserrat";
+    src: url(/public/fonts/Montserrat-Black.ttf);
+    font-weight: 900;
+}
+@font-face {
+    font-family: "Inter";
+    src: url(/public/fonts/Inter-VariableFont_opsz\,wght.ttf);
+    font-weight: 900;
+}
+@font-face {
+    font-family: "Street";
+    src: url(/public/fonts/19012.ttf);
+}
+@font-face {
+    font-family: "SimpleTags";
+    src: url(/public/fonts/F563-Regular.ttf);
+}
+:root {
+    --accent: #3DCC0D;
+    --white: #F0F0F0;
+    --black: #000000;
+    --gray: #D9D9D9;
+    --accent2: #6AA656;
+    --bg2: #151515;
+    --bg_input: #222222;
+    --stroke_input: #333333;
+    --text: #EEEEEE;
+
+}
+
 .login-container {
+    display: flex;
     width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
+    height: 100%;
 }
 
 .login-card {
-    padding: 50px 40px;
+    width: 510px;
+    border-radius: 20px;
+    margin: 0 auto;
+    padding: 50px 50px;
+    gap: 10px;
+    background-color: var(--bg2);
 }
 
 .login-header {
     text-align: center;
     margin-bottom: 40px;
 }
-
 .login-header h1 {
     font-size: 28px;
     color: #333;

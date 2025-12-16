@@ -31,12 +31,12 @@
                 </div>
                 <% if (locals.user.role === 'Пользователь') { %>
                     <a href="/profile" class="nav-link">
-                    <span>Профиль</span>
+                    <span>ПРОФИЛЬ</span>
                 </a>
                 <% } %>
                 <% if (locals.user.role === 'Админ') { %>
                 <a href="/admin" class="nav-link">
-                    <span>Админ-панель</span>
+                    <span>АДМИН-ПАНЕЛЬ</span>
                 </a>
                 <% } %>
                 <form action="/logout" class="form_out">
@@ -50,7 +50,7 @@
                 </form>
             <% } else { %>
                 <a href="/login" class="nav-link">
-                    <span>Вход</span>
+                    <span>ВХОД</span>
                 </a>
             <% } %>
         </div>
