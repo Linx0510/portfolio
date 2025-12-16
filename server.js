@@ -124,14 +124,194 @@ const User = sequelize.define('User', {
     }
 });
 
+// Модель типа проекта
+const ProjectType = sequelize.define('ProjectType', {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    name: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+        unique: true,
+        validate: {
+            notEmpty: {
+                msg: 'Название типа не может быть пустым'
+            }
+        }
+    },
+    description: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    },
+    stages: {
+        type: DataTypes.JSON, // JSON массив этапов для этого типа
+        allowNull: false,
+        defaultValue: []
+    }
+}, {
+    timestamps: true
+});
+
+// Модель проекта
+const Project = sequelize.define('Project', {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    name: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'Название проекта не может быть пустым'
+            },
+            len: {
+                args: [2, 255],
+                msg: 'Название проекта должно содержать от 2 до 255 символов'
+            }
+        }
+    },
+    description: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    },
+    startDate: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        validate: {
+            isDate: {
+                msg: 'Дата начала должна быть корректной датой'
+            }
+        }
+    },
+    deadline: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        validate: {
+            isDate: {
+                msg: 'Дедлайн должен быть корректной датой'
+            },
+            isAfterStartDate(value) {
+                if (value <= this.startDate) {
+                    throw new Error('Дедлайн должен быть позже даты начала');
+                }
+            }
+        }
+    },
+    budget: {
+        type: DataTypes.DECIMAL(10, 2), // до 10 цифр, 2 после запятой
+        allowNull: false,
+        validate: {
+            isDecimal: {
+                msg: 'Бюджет должен быть числом'
+            },
+            min: {
+                args: [0],
+                msg: 'Бюджет не может быть отрицательным'
+            }
+        }
+    },
+    status: {
+        type: DataTypes.ENUM('planned', 'in_progress', 'on_hold', 'completed', 'cancelled'),
+        defaultValue: 'planned',
+        allowNull: false
+    },
+    currentStage: {
+        type: DataTypes.INTEGER, // индекс текущего этапа из stages в ProjectType
+        defaultValue: 0,
+        allowNull: false
+    },
+    progress: {
+        type: DataTypes.INTEGER, // процент выполнения от 0 до 100
+        defaultValue: 0,
+        validate: {
+            min: 0,
+            max: 100
+        }
+    },
+    notes: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    }
+}, {
+    timestamps: true,
+    indexes: [
+        { fields: ['clientId'] },
+        { fields: ['projectTypeId'] },
+        { fields: ['status'] },
+        { fields: ['deadline'] }
+    ],
+    hooks: {
+        beforeCreate: (project) => {
+            if (project.deadline <= project.startDate) {
+                throw new Error('Дедлайн должен быть позже даты начала');
+            }
+        },
+        beforeUpdate: (project) => {
+            if (project.changed('deadline') && project.deadline <= project.startDate) {
+                throw new Error('Дедлайн должен быть позже даты начала');
+            }
+        }
+    }
+});
+
+// Определение связей между моделями
 Role.hasMany(User, { foreignKey: "roleId" });
 User.belongsTo(Role, { foreignKey: 'roleId' });
 
-async function initializeRolesAndAdmin() {
+// Клиент (User) может иметь много проектов
+User.hasMany(Project, { foreignKey: 'clientId', as: 'clientProjects' });
+Project.belongsTo(User, { foreignKey: 'clientId', as: 'client' });
+
+// Тип проекта может использоваться в многих проектах
+ProjectType.hasMany(Project, { foreignKey: 'projectTypeId' });
+Project.belongsTo(ProjectType, { foreignKey: 'projectTypeId' });
+
+// Модель этапа проекта (дополнительная модель для хранения этапов)
+const ProjectStage = sequelize.define('ProjectStage', {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    name: {
+        type: DataTypes.STRING(255),
+        allowNull: false
+    },
+    description: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    },
+    order: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+    },
+    isCompleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
+    completedAt: {
+        type: DataTypes.DATE,
+        allowNull: true
+    }
+}, {
+    timestamps: true
+});
+
+// Связь проекта с этапами
+Project.hasMany(ProjectStage, { foreignKey: 'projectId' });
+ProjectStage.belongsTo(Project, { foreignKey: 'projectId' });
+
+async function initializeRolesTypesAndAdmin() {
     try {
         await sequelize.sync({ force: false });
         
-        const roles = ['Администратор', 'Пользователь'];
+        // Инициализация ролей
+        const roles = ['Админ', 'Пользователь'];
         for (const roleName of roles) {
             await Role.findOrCreate({
                 where: { name: roleName },
@@ -139,25 +319,66 @@ async function initializeRolesAndAdmin() {
             });
         }
         
+        // Инициализация типов проектов
+        const projectTypes = [
+            {
+                name: 'ДИЗАЙН-МАКЕТ',
+                description: 'Создание дизайн-макета сайта или приложения',
+                stages: ['Бриф и анализ', 'Мудборд', 'Прототип', 'Визуальный дизайн', 'Подготовка к передаче']
+            },
+            {
+                name: 'ВЕРСТКА',
+                description: 'Верстка по готовому дизайну',
+                stages: ['Анализ макета', 'Настройка окружения', 'Базовая верстка', 'Адаптивная верстка', 'Оптимизация и тестирование']
+            },
+            {
+                name: 'ПОЛНАЯ РАЗРАБОТКА',
+                description: 'Полный цикл разработки проекта',
+                stages: ['Анализ требований', 'Проектирование', 'Дизайн', 'Фронтенд разработка', 'Бэкенд разработка', 'Тестирование', 'Развертывание']
+            }
+        ];
+        
+        for (const typeData of projectTypes) {
+            await ProjectType.findOrCreate({
+                where: { name: typeData.name },
+                defaults: typeData
+            });
+        }
+        
         // Находим обе роли
-        const adminRole = await Role.findOne({ where: { name: 'Администратор' } });
+        const adminRole = await Role.findOne({ where: { name: 'Админ' } });
         const userRole = await Role.findOne({ where: { name: 'Пользователь' } });
         
         // Проверяем существование админа
-        const existingAdmin = await User.findOne({ where: { email: 'admin@example.com' } });
+        const existingAdmin = await User.findOne({ where: { email: 'Linx05@yandex.ru' } });
         
         if (!existingAdmin) {
-            const hashedPassword = await bcrypt.hash('admin123', 10);
+            const hashedPassword = await bcrypt.hash('Liana1234', 10);
             await User.create({
-                name: 'Администратор',
-                email: 'admin@example.com',
+                name: 'Сисенова Лиана',
+                email: 'Linx05@yandex.ru',
                 password: hashedPassword,
                 roleId: adminRole.id
             });
-            console.log('Администратор создан: email - admin@example.com, пароль - admin123');
+            console.log('Администратор создан: email - Linx05@yandex.ru, пароль - Liana1234');
+        }
+        
+        // Создаем тестового клиента
+        const existingClient = await User.findOne({ where: { email: 'client@example.com' } });
+        
+        if (!existingClient) {
+            const hashedPassword = await bcrypt.hash('client123', 10);
+            await User.create({
+                name: 'Тестовый Клиент',
+                email: 'client@example.com',
+                password: hashedPassword,
+                roleId: userRole.id
+            });
+            console.log('Тестовый клиент создан: email - client@example.com, пароль - client123');
         }
         
         console.log('База данных инициализирована');
+        console.log('Типы проектов созданы:', projectTypes.map(t => t.name).join(', '));
     } catch (error) {
         console.error('Ошибка инициализации БД:', error);
     }
@@ -271,6 +492,228 @@ app.get('/dashboard', isAuthenticated, (req, res) => {
     res.render('dashboard', { 
         title: 'Панель управления - LINX'
     });
+});
+
+// Маршруты для проектов
+app.get('/projects', isAuthenticated, async (req, res) => {
+    try {
+        const user = await User.findByPk(req.session.user.id, { include: Role });
+        let projects;
+        
+        if (user.Role.name === 'Админ') {
+            projects = await Project.findAll({
+                include: [
+                    { model: User, as: 'client', attributes: ['id', 'name', 'email'] },
+                    { model: ProjectType, attributes: ['id', 'name'] }
+                ],
+                order: [['createdAt', 'DESC']]
+            });
+        } else {
+            projects = await Project.findAll({
+                where: { clientId: user.id },
+                include: [
+                    { model: User, as: 'client', attributes: ['id', 'name', 'email'] },
+                    { model: ProjectType, attributes: ['id', 'name'] }
+                ],
+                order: [['createdAt', 'DESC']]
+            });
+        }
+        
+        res.render('projects', { 
+            title: 'Проекты - LINX',
+            projects,
+            isAdmin: user.Role.name === 'Админ'
+        });
+    } catch (error) {
+        console.error('Ошибка загрузки проектов:', error);
+        res.redirect('/profile?error=Ошибка загрузки проектов');
+    }
+});
+
+app.get('/projects/new', isAuthenticated, hasRole('Админ'), async (req, res) => {
+    try {
+        const clients = await User.findAll({
+            where: { roleId: 2 }, // Только обычные пользователи (клиенты)
+            attributes: ['id', 'name', 'email']
+        });
+        
+        const projectTypes = await ProjectType.findAll();
+        
+        res.render('project-form', {
+            title: 'Создать новый проект - LINX',
+            project: null,
+            clients,
+            projectTypes,
+            action: '/projects'
+        });
+    } catch (error) {
+        console.error('Ошибка загрузки формы:', error);
+        res.redirect('/projects?error=Ошибка загрузки формы');
+    }
+});
+
+app.post('/projects', isAuthenticated, hasRole('Админ'), async (req, res) => {
+    try {
+        const { name, description, startDate, deadline, budget, clientId, projectTypeId, notes } = req.body;
+        
+        const project = await Project.create({
+            name,
+            description,
+            startDate: new Date(startDate),
+            deadline: new Date(deadline),
+            budget: parseFloat(budget),
+            clientId: parseInt(clientId),
+            projectTypeId: parseInt(projectTypeId),
+            notes,
+            status: 'planned'
+        });
+        
+        // Создаем этапы проекта на основе типа
+        const projectType = await ProjectType.findByPk(projectTypeId);
+        if (projectType && projectType.stages) {
+            for (let i = 0; i < projectType.stages.length; i++) {
+                await ProjectStage.create({
+                    name: projectType.stages[i],
+                    order: i,
+                    projectId: project.id
+                });
+            }
+        }
+        
+        res.redirect('/projects?success=Проект создан успешно');
+    } catch (error) {
+        console.error('Ошибка создания проекта:', error);
+        res.redirect('/projects/new?error=' + encodeURIComponent(error.message));
+    }
+});
+
+app.get('/projects/:id', isAuthenticated, async (req, res) => {
+    try {
+        const projectId = req.params.id;
+        const user = await User.findByPk(req.session.user.id, { include: Role });
+        
+        const project = await Project.findByPk(projectId, {
+            include: [
+                { model: User, as: 'client', attributes: ['id', 'name', 'email'] },
+                { model: ProjectType, attributes: ['id', 'name', 'stages'] },
+                { model: ProjectStage, order: [['order', 'ASC']] }
+            ]
+        });
+        
+        if (!project) {
+            return res.status(404).send('Проект не найден');
+        }
+        
+        // Проверка доступа
+        if (user.Role.name !== 'Админ' && project.clientId !== user.id) {
+            return res.status(403).send('Доступ запрещен');
+        }
+        
+        const clients = await User.findAll({
+            where: { roleId: 2 },
+            attributes: ['id', 'name', 'email']
+        });
+        
+        const projectTypes = await ProjectType.findAll();
+        
+        res.render('project-detail', {
+            title: `${project.name} - LINX`,
+            project,
+            clients,
+            projectTypes,
+            isAdmin: user.Role.name === 'Админ'
+        });
+    } catch (error) {
+        console.error('Ошибка загрузки проекта:', error);
+        res.redirect('/projects?error=Ошибка загрузки проекта');
+    }
+});
+
+app.post('/projects/:id', isAuthenticated, hasRole('Админ'), async (req, res) => {
+    try {
+        const projectId = req.params.id;
+        const { name, description, startDate, deadline, budget, clientId, projectTypeId, status, progress, notes } = req.body;
+        
+        const project = await Project.findByPk(projectId);
+        if (!project) {
+            return res.status(404).send('Проект не найден');
+        }
+        
+        project.name = name;
+        project.description = description;
+        project.startDate = new Date(startDate);
+        project.deadline = new Date(deadline);
+        project.budget = parseFloat(budget);
+        project.clientId = parseInt(clientId);
+        project.projectTypeId = parseInt(projectTypeId);
+        project.status = status;
+        project.progress = parseInt(progress);
+        project.notes = notes;
+        
+        await project.save();
+        
+        res.redirect(`/projects/${projectId}?success=Проект обновлен`);
+    } catch (error) {
+        console.error('Ошибка обновления проекта:', error);
+        res.redirect(`/projects/${req.params.id}?error=${encodeURIComponent(error.message)}`);
+    }
+});
+
+app.post('/projects/:id/stages/:stageId/complete', isAuthenticated, hasRole('Админ'), async (req, res) => {
+    try {
+        const { stageId } = req.params;
+        
+        const stage = await ProjectStage.findByPk(stageId);
+        if (!stage) {
+            return res.status(404).json({ error: 'Этап не найден' });
+        }
+        
+        stage.isCompleted = true;
+        stage.completedAt = new Date();
+        await stage.save();
+        
+        // Пересчитываем прогресс проекта
+        const project = await Project.findByPk(stage.projectId, {
+            include: [ProjectStage]
+        });
+        
+        const totalStages = project.ProjectStages.length;
+        const completedStages = project.ProjectStages.filter(s => s.isCompleted).length;
+        const progress = Math.round((completedStages / totalStages) * 100);
+        
+        project.progress = progress;
+        project.currentStage = completedStages;
+        
+        if (progress === 100) {
+            project.status = 'completed';
+        } else if (progress > 0) {
+            project.status = 'in_progress';
+        }
+        
+        await project.save();
+        
+        res.json({ success: true, progress, currentStage: project.currentStage });
+    } catch (error) {
+        console.error('Ошибка завершения этапа:', error);
+        res.status(500).json({ error: 'Ошибка завершения этапа' });
+    }
+});
+
+app.delete('/projects/:id', isAuthenticated, hasRole('Админ'), async (req, res) => {
+    try {
+        const projectId = req.params.id;
+        const project = await Project.findByPk(projectId);
+        
+        if (!project) {
+            return res.status(404).json({ error: 'Проект не найден' });
+        }
+        
+        await project.destroy();
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Ошибка удаления проекта:', error);
+        res.status(500).json({ error: 'Ошибка удаления проекта' });
+    }
 });
 
 app.get('/register', (req, res) => {
@@ -423,6 +866,20 @@ app.get('/profile', isAuthenticated, async (req, res) => {
     try {
         const user = await User.findByPk(req.session.user.id, { include: Role });
         
+        // Получаем статистику проектов для пользователя
+        let projectStats = {};
+        if (user.Role.name === 'Админ') {
+            const totalProjects = await Project.count();
+            const activeProjects = await Project.count({ where: { status: 'in_progress' } });
+            const completedProjects = await Project.count({ where: { status: 'completed' } });
+            projectStats = { totalProjects, activeProjects, completedProjects };
+        } else {
+            const totalProjects = await Project.count({ where: { clientId: user.id } });
+            const activeProjects = await Project.count({ where: { clientId: user.id, status: 'in_progress' } });
+            const completedProjects = await Project.count({ where: { clientId: user.id, status: 'completed' } });
+            projectStats = { totalProjects, activeProjects, completedProjects };
+        }
+        
         res.render('profile', { 
             title: 'Профиль - ' + user.name,
             user: {
@@ -432,6 +889,7 @@ app.get('/profile', isAuthenticated, async (req, res) => {
                 role: user.Role.name,
                 createdAt: user.createdAt
             },
+            projectStats,
             success: req.query.success || null,
             error: req.query.error || null
         });
@@ -550,76 +1008,43 @@ app.get('/api/roles', isAuthenticated, hasRole('Админ'), async (req, res) =
     }
 });
 
-// ВАЖНО: УБРАТЬ обработчики ошибок, которые используют несуществующие файлы
-// Вместо них добавить простые обработчики в конце:
-
-// Простой обработчик 404
-app.use((req, res) => {
-    res.status(404).send(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>404 - Страница не найдена</title>
-            <style>
-                body { font-family: Arial; text-align: center; padding: 50px; }
-                h1 { color: #dc2626; }
-                a { color: #6d28d9; text-decoration: none; }
-            </style>
-        </head>
-        <body>
-            <h1>404 - Страница не найдена</h1>
-            <p>Запрашиваемая страница не существует.</p>
-            <p><a href="/">Вернуться на главную</a></p>
-        </body>
-        </html>
-    `);
-});
-
-// Простой обработчик ошибок сервера
-app.use((err, req, res, next) => {
-    console.error('Ошибка сервера:', err);
-    res.status(500).send(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>500 - Ошибка сервера</title>
-            <style>
-                body { font-family: Arial; text-align: center; padding: 50px; }
-                h1 { color: #dc2626; }
-                a { color: #6d28d9; text-decoration: none; margin: 0 10px; }
-                .error-details { 
-                    background: #fee2e2; 
-                    padding: 15px; 
-                    margin: 20px auto; 
-                    max-width: 600px; 
-                    text-align: left; 
-                    border-radius: 5px; 
-                }
-            </style>
-        </head>
-        <body>
-            <h1>500 - Ошибка сервера</h1>
-            <p>Произошла внутренняя ошибка сервера.</p>
-            <div class="error-details">
-                <strong>Ошибка:</strong> ${err.message || 'Неизвестная ошибка'}
-            </div>
-            <p>
-                <a href="/">Главная</a>
-                <a href="/login">Войти</a>
-                <a href="javascript:location.reload()">Обновить</a>
-            </p>
-        </body>
-        </html>
-    `);
+// API для получения статистики проектов
+app.get('/api/projects/stats', isAuthenticated, hasRole('Админ'), async (req, res) => {
+    try {
+        const totalProjects = await Project.count();
+        const projectsByStatus = await Project.findAll({
+            attributes: ['status', [sequelize.fn('COUNT', sequelize.col('status')), 'count']],
+            group: ['status']
+        });
+        
+        const projectsByType = await Project.findAll({
+            attributes: [
+                [sequelize.col('ProjectType.name'), 'type'],
+                [sequelize.fn('COUNT', sequelize.col('Project.id')), 'count']
+            ],
+            include: [{ model: ProjectType, attributes: [] }],
+            group: ['ProjectType.name']
+        });
+        
+        const totalBudget = await Project.sum('budget');
+        
+        res.json({
+            totalProjects,
+            projectsByStatus,
+            projectsByType,
+            totalBudget
+        });
+    } catch (error) {
+        console.error('Ошибка получения статистики:', error);
+        res.status(500).json({ error: 'Ошибка получения статистики' });
+    }
 });
 
 app.listen(port, async () => {
-    await initializeRolesAndAdmin();
+    await initializeRolesTypesAndAdmin();
     console.log(`Сервер запущен: http://localhost:${port}/`);
     console.log('Данные для входа:');
     console.log('Администратор:');
-    console.log('  Email: admin@example.com');
-    console.log('  Пароль: admin123');
-    console.log('\nДля регистрации нового пользователя перейдите на:');
-    console.log('  http://localhost:5000/register');
+    console.log('  Email: Linx05@yandex.ru');
+    console.log('  Пароль: Liana1234');
 });
