@@ -74,7 +74,7 @@ main{
     flex-direction: column;
     width: 100%;
     height: 100vh;
-    background-image: url(bg_main.svg);
+    background-image: url(/img/bg_main.svg);
     object-fit: cover;
     padding: 0px 40px;
     align-items: center;
@@ -245,7 +245,7 @@ nav{
 }
 
 .skils-service{
-    background-image: url(skils_bg.svg);
+    background-image: url(/img/skils_bg.svg);
     object-fit: cover;
     display: flex;
     align-items: center;
@@ -411,15 +411,15 @@ nav{
 }
 
 .usluga_1 {
-    background-image: url(us1.svg);
+    background-image: url(/img/us1.svg);
 }
 
 .usluga_2 {
-    background-image: url(us2.svg);
+    background-image: url(/img/us2.svg);
 }
 
 .usluga_3 {
-    background-image: url(us3.svg);
+    background-image: url(/img/us3.svg);
 }
 
 .headuslyga {
@@ -758,35 +758,35 @@ details > p {
     font-weight: 800;
 }
 .WA{
-    background-image: url(white.svg);
+    background-image: url(/img/white.svg);
     object-fit: cover;
 }
 .EP{
-    background-image: url(epilate.svg);
+    background-image: url(/img/epilate.svg);
     object-fit: cover;
 }
 .TBS{
-    background-image: url(TBS2.svg);
+    background-image: url(/img/TBS2.svg);
     object-fit: cover;
 }
 .LO{
-    background-image: url(lingvisto.svg);
+    background-image: url(/img/lingvisto.svg);
     object-fit: cover;
 }
 .Market{
-    background-image: url(mark.svg);
+    background-image: url(/img/mark.svg);
     object-fit: cover;
 }
 .KP{
-    background-image: url(KP2.svg);
+    background-image: url(/img/KP2.svg);
     object-fit: cover;
 }
 .VM{
-    background-image: url(VM.svg);
+    background-image: url(/img/VM.svg);
     object-fit: cover;
 }
 .WD{
-    background-image: url(WEDDING.svg);
+    background-image: url(/img/WEDDING.svg);
     object-fit: cover;
 }
 

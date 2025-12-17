@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+
+    <div class="admin-container">
+        <div class="admin-header">
+            <div class="header-left">
+                <h1>ДОБРО ПОЖАЛОВАТЬ, <%= user.name %></h1>
+                <p class="admin-subtitle">Управляйте проектами</p>
+            </div>
+        </div>
+
+        <!-- Заголовок и действия -->
+        <div class="admin-header">
+            <div class="header-left">
+                <h1>МОИ ПРОЕКТЫ</h1>
+                <p class="admin-subtitle">Обзор всех ваших проектов</p>
+            </div>
+            <div class="header-actions">
+                <a href="/profile" class="btn-profile">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 8C10.2091 8 12 6.20914 12 4C12 1.79086 10.2091 0 8 0C5.79086 0 4 1.79086 4 4C4 6.20914 5.79086 8 8 8Z" fill="white"/>
+                        <path d="M8 9C4.68571 9 2 11.6857 2 15V16H14V15C14 11.6857 11.3143 9 8 9Z" fill="white"/>
+                    </svg>
+                    ПРОФИЛЬ
+                </a>
+            </div>
+        </div>
+
+        <!-- Статистика -->
+        <div class="admin-stats">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg width="28" height="27" viewBox="0 0 28 27" fill="white" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15.4252 0.335984C14.5259 -0.107263 13.2908 -0.11392 12.3853 0.327752C8.51732 2.21439 5.0123 4.37598 1.94335 6.771C1.53411 7.09038 1.26329 7.53738 1.26793 8.0483C1.27255 8.55748 1.54952 8.9995 1.95741 9.31449C5.00166 11.6654 8.51063 13.8295 12.3083 15.7014C13.2075 16.1447 14.4427 16.1514 15.3482 15.7097C19.2161 13.823 22.7211 11.6615 25.7901 9.26643C26.1993 8.94706 26.4701 8.50006 26.4655 7.98913C26.4609 7.47995 26.1839 7.03793 25.776 6.72294C22.7318 4.37207 19.2228 2.20793 15.4252 0.335984Z"/>
+                        <path d="M27.3038 14.7145C27.8308 14.4037 27.9913 13.7483 27.6623 13.2505C27.3332 12.7527 26.6392 12.6012 26.1122 12.9119L16.9513 18.3135C16.1353 18.7947 15.0266 19.063 13.8665 19.063C12.7063 19.0631 11.5975 18.7949 10.7813 18.3138L1.72078 12.9734C1.19369 12.6627 0.499722 12.8144 0.170766 13.3122C-0.158191 13.81 0.00243026 14.4654 0.529523 14.7761L9.59002 20.1166C10.8333 20.8494 12.3757 21.1881 13.8666 21.188C15.3575 21.1879 16.8998 20.849 18.1429 20.1161L27.3038 14.7145Z"/>
+                        <path d="M27.3039 20.0336C27.8309 19.7228 27.9913 19.0673 27.6622 18.5696C27.3331 18.0719 26.6391 17.9204 26.1121 18.2312L18.1787 22.9102C17.0194 23.594 15.4687 23.9636 13.8664 23.9637C12.2641 23.9637 10.7132 23.5943 9.55369 22.9107L1.72089 18.2926C1.19384 17.9819 0.499857 18.1335 0.170837 18.6313C-0.158183 19.129 0.00235498 19.7845 0.529408 20.0952L8.3622 24.7133C9.94888 25.6488 11.9335 26.0888 13.8665 26.0887C15.7996 26.0885 17.7841 25.6483 19.3705 24.7126L27.3039 20.0336Z"/>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <h3 id="total-projects"><%= totalProjects %></h3>
+                    <p>Всего проектов</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10.0106 10.0368C11.9261 8.11467 14.5732 6.92712 17.4997 6.92712C23.3389 6.92712 28.0726 11.6608 28.0726 17.5C28.0726 23.3393 23.3389 28.073 17.4997 28.073C11.6604 28.073 6.92676 23.3393 6.92676 17.5C6.92676 16.896 6.43707 16.4063 5.83301 16.4063C5.22895 16.4063 4.73926 16.896 4.73926 17.5C4.73926 24.5474 10.4523 30.2605 17.4997 30.2605C24.5471 30.2605 30.2601 24.5474 30.2601 17.5C30.2601 10.4527 24.5471 4.73962 17.4997 4.73962C13.9683 4.73962 10.7703 6.17553 8.46111 8.49267C8.424 8.52991 8.39013 8.56916 8.35949 8.61006L6.52554 6.77611C6.32548 6.57605 6.02774 6.50977 5.76171 6.60609C5.49568 6.70241 5.30938 6.94392 5.28377 7.22569L4.76817 12.8973C4.74858 13.1128 4.82572 13.3259 4.97874 13.4789C5.13176 13.6319 5.34484 13.7091 5.56036 13.6895L11.2319 13.1739C11.5137 13.1483 11.7552 12.962 11.8515 12.6959C11.9479 12.4299 11.8816 12.1322 11.6815 11.9321L9.89052 10.1411C9.9324 10.1097 9.97254 10.075 10.0106 10.0368Z" fill="#0041CE"/>
+                        <path d="M18.5934 10.2084C18.5934 9.60431 18.1037 9.11462 17.4997 9.11462C16.8956 9.11462 16.4059 9.60431 16.4059 10.2084V17.5C16.4059 17.8772 16.6002 18.2277 16.92 18.4275L21.295 21.1619C21.8072 21.4821 22.482 21.3263 22.8022 20.8141C23.1223 20.3019 22.9666 19.6271 22.4544 19.3069L18.5934 16.8938V10.2084Z" fill="#0041CE"/>
+                    </svg>
+
+                </div>
+                <div class="stat-info">
+                    <h3 id="active-projects"><%= activeProjects %></h3>
+                    <p>Активных проектов</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.5003 32.0833C21.5274 32.0833 25.1732 30.451 27.8123 27.8119C30.4513 25.1728 32.0837 21.527 32.0837 17.5C32.0837 13.4729 30.4513 9.82708 27.8123 7.18798C25.1732 4.54892 21.5274 2.91663 17.5003 2.91663C13.4733 2.91663 9.82745 4.54892 7.18835 7.18798C4.54929 9.82708 2.91699 13.4729 2.91699 17.5C2.91699 21.527 4.54929 25.1728 7.18835 27.8119C9.82745 30.451 13.4733 32.0833 17.5003 32.0833Z" fill="#E98E16"/>
+                        <path d="M11.667 17.5L16.042 21.875L24.792 13.125" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+
+                </div>
+                <div class="stat-info">
+                    <h3 id="end-projects"><%= completedProjects %></h3>
+                    <p>Завершенных проектов</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg width="35" height="35" viewBox="0 0 35 35" fill="white" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.5 2.91666C9.5375 2.91666 2.91666 9.5375 2.91666 17.5C2.91666 25.4625 9.5375 32.0833 17.5 32.0833C25.4625 32.0833 32.0833 25.4625 32.0833 17.5C32.0833 9.5375 25.4625 2.91666 17.5 2.91666ZM17.5 5.83333C23.8417 5.83333 29.1667 11.1583 29.1667 17.5C29.1667 23.8417 23.8417 29.1667 17.5 29.1667C11.1583 29.1667 5.83333 23.8417 5.83333 17.5C5.83333 11.1583 11.1583 5.83333 17.5 5.83333ZM15.9375 8.75H19.0625V20.4167H15.9375V8.75ZM15.9375 22.75H19.0625V25.875H15.9375V22.75Z"/>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <h3><%= totalProgress %>%</h3>
+                    <p>Общий прогресс</p>
+                </div>
+            </div>
+        </div>
+
+        
+
+        <!-- Таблица проектов -->
+        <div class="tables-container">
+            <div class="table-section">
+                <div class="section-header">
+                    <h2>Мои проекты</h2>
+                </div>
+                
+                <div class="table-wrapper">
+                    <% if (projects && projects.length > 0) { %>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Название</th>
+                                    <th>Тип проекта</th>
+                                    <th>Статус</th>
+                                    <th>Прогресс</th>
+                                    <th>Срок</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% projects.forEach(project => { %>
+                                    <tr>
+                                        <td><%= project.id || 'N/A' %></td>
+                                        <td><%= project.name || 'Без названия' %></td>
+                                        <td>
+                                            <% if (project.ProjectType) { %>
+                                                <%= project.ProjectType.name || 'N/A' %>
+                                            <% } else { %>
+                                                N/A
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <span class="status <%= project.status === 'in_progress' ? 'status-active' : project.status === 'completed' ? 'status-completed' : 'status-pending' %>">
+                                                <%= project.status === 'planned' ? 'Запланирован' : 
+                                                   project.status === 'in_progress' ? 'В работе' : 
+                                                   project.status === 'completed' ? 'Завершен' : 
+                                                   project.status === 'on_hold' ? 'Приостановлен' : 
+                                                   project.status === 'cancelled' ? 'Отменен' : project.status %>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="progress-bar" style="height: 10px; margin: 5px 0;">
+                                                <div class="progress-fill" style="width: '<%= project.progress || 0 %>%'"></div>
+                                            </div>
+                                            <span><%= project.progress || 0 %>%</span>
+                                        </td>
+                                        <td>
+                                            <% if (project.deadline) { %>
+                                                <%= new Date(project.deadline).toLocaleDateString('ru-RU') %>
+                                            <% } else { %>
+                                                Не указан
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    <% } else { %>
+                        <div class="no-data">
+                            <p>У вас пока нет проектов</p>
+                            <p style="margin-top: 10px; font-size: 14px;">Обратитесь к администратору для создания проекта</p>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Анимация загрузки прогресса
+        document.addEventListener('DOMContentLoaded', function() {
+            const progressBars = document.querySelectorAll('.progress-fill');
+            
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 300);
+            });
+        });
+    </script>
+</body>
+</html>

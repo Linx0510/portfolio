@@ -6,13 +6,13 @@
             </div>
             
             <% if (locals.success) { %>
-                <div class="alert alert-success" style="margin: 10px 0;">
+                <div class="alert alert-success" style="margin: 10px 0; padding: 10px; background: #d1f7c4; color: #0e6245; border-radius: 4px;">
                     <i class="fas fa-check"></i> <%= locals.success %>
                 </div>
             <% } %>
             
             <% if (locals.error) { %>
-                <div class="alert alert-error" style="margin: 10px 0;">
+                <div class="alert alert-error" style="margin: 10px 0; padding: 10px; background: #f7c4c4; color: #620e0e; border-radius: 4px;">
                     <i class="fas fa-exclamation"></i> <%= locals.error %>
                 </div>
             <% } %>
@@ -32,37 +32,34 @@
             </div>
         </div>
         
-        <!-- ПРОСТАЯ ФОРМА РЕДАКТИРОВАНИЯ ПРЯМО НА СТРАНИЦЕ -->
-        <div class="profile-edit-form">
-            <h3>Изменить имя:</h3>
-            <form method="POST" action="/profile/update" style="display: flex; gap: 10px;">
+        <!-- ФОРМА ИЗМЕНЕНИЯ ИМЕНИ -->
+        <div class="profile-edit-form" style="margin-top: 20px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px;">
+            <h3 style="margin-bottom: 15px;">Изменить имя:</h3>
+            <form method="POST" action="/profile/update" style="display: flex; gap: 10px; align-items: center;">
                 <input 
                     type="text" 
                     name="name" 
                     value="<%= locals.user.name %>"
-                    style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;"
                     required
+                    class="input-group"
                 >
                 <button 
-                    type="submit" 
-                    style="padding: 8px 16px; background: #4a6cf7; color: white; border: none; border-radius: 4px; cursor: pointer;"
+                    type="submit" class="btn-profile"
                 >
                     Сохранить
                 </button>
             </form>
-            <small style="color: #666; display: block; margin-top: 5px;">
-                Email и роль изменить нельзя
-            </small>
         </div>
         
-        <div class="profile-actions">
+        
+        <div  class="profile-actions" >
             <% if (locals.user.role === 'Админ') { %>
-                <a href="/admin" style="display: inline-block; padding: 10px 20px; background: #4a6cf7; color: white; text-decoration: none; border-radius: 4px; margin-right: 10px;">
-                    Админ-панель
+                <a href="/admin" class="btn-profile" >
+                    </i> Админ-панель
                 </a>
             <% } %>
             
-            <a href="/logout" style="display: inline-block; padding: 10px 20px; background: #e53e3e; color: white; text-decoration: none; border-radius: 4px;">
+            <a href="/logout" class="btn-profile">
                 Выйти
             </a>
         </div>

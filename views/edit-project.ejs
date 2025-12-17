@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Редактировать проект: <%= project.name %></h1>
+            <a href="/admin" class="btn-profile"> ← Назад </a>
+        </div>
+        
+        <form action="/projects/<%= project.id %>/update" method="POST">
+            <div class="form-section">
+                <h2>Основная информация</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                       <label for="name">НАЗВАНИЕ</label>
+                        <input type="text" id="name" name="name" 
+                               value="<%= project.name %>" 
+                               required class="input-group" 
+                               placeholder="Введите название проекта">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userId">КЛИЕНТ</label>
+                        <select id="userId" name="userId" required class="input-group">
+                            <option value="">Выберите клиента</option>
+                            <% regularUsers.forEach(user => { %>
+                                <option value="<%= user.id %>" 
+                                        <%= project.userId == user.id ? 'selected' : '' %>>
+                                    <%= user.name %> (<%= user.email %>)
+                                </option>
+                            <% }); %>
+                        </select>
+                        <span class="form-hint">Только пользователи с ролью "Пользователь"</span>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="projectTypeId">ТИП ПРОЕКТА</label>
+                        <select id="projectTypeId" name="projectTypeId"class="input-group">
+                            <option value="">Выберите тип</option>
+                            <% projectTypes.forEach(type => { %>
+                                <option value="<%= type.id %>" 
+                                        <%= project.projectTypeId == type.id ? 'selected' : '' %>>
+                                    <%= type.name %>
+                                </option>
+                            <% }); %>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="budget">БЮДЖЕТ</label>
+                        <input type="number" id="budget" name="budget" 
+                               value="<%= project.budget %>" 
+                               min="0" step="1000" required 
+                               class="input-group" placeholder="₽">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2>Даты и сроки</h2>
+                
+                <div class="alert alert-warning">
+                    <strong>Внимание:</strong> Дедлайн должен быть позже даты начала
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="startDate">ДАТА НАЧАЛА</label>
+                        <input type="date" id="startDate" name="startDate" 
+                               value="<%= project.startDate %>" 
+                               required class="input-group">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="deadline">КРАЙНИЙ СРОК</label>
+                        <input type="date" id="deadline" name="deadline" 
+                               value="<%= project.deadline %>" 
+                               required class="input-group">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2>Статус и прогресс</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="status">СТАТУС</label>
+                        <select id="status" name="status" required class="input-group">
+                            <option value="planned" <%= project.status === 'planned' ? 'selected' : '' %>>Запланирован</option>
+                            <option value="in_progress" <%= project.status === 'in_progress' ? 'selected' : '' %>>В работе</option>
+                            <option value="on_hold" <%= project.status === 'on_hold' ? 'selected' : '' %>>Приостановлен</option>
+                            <option value="completed" <%= project.status === 'completed' ? 'selected' : '' %>>Завершен</option>
+                            <option value="cancelled" <%= project.status === 'cancelled' ? 'selected' : '' %>>Отменен</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="progress">ПРОГРЕСС</label>
+                        <input type="range" id="progress" name="progress" 
+                               min="0" max="100" step="5" 
+                               value='<%= project.progress || 0 %>'
+                               class="input-group"
+                               oninput="progressValue.value = this.value">
+                        <div class="prog" >
+                            <span>0%</span>
+                            <output id="progressValue" style="font-weight: bold;"><%= project.progress || 0 %>%</output>
+                            <span>100%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2>Описание и детали</h2>
+                
+                <div class="form-group full-width">
+                    <label for="description">ОПИСАНИЕ/ТЗ</label>
+                    <textarea id="description" name="description" 
+                              class="input-group"
+                              placeholder="Подробное описание проекта, техническое задание..."><%= project.description || '' %></textarea>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label for="notes">ЗАМЕТКИ</label>
+                    <textarea id="notes" name="notes" 
+                              class="input-group"
+                              placeholder="Внутренние заметки, комментарии..."><%= project.notes || '' %></textarea>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <a href="/projects/<%= project.id %>" class="btn-profile">
+                    Отмена
+                </a>
+                <button type="submit" class="btn-profile">
+                    Сохранить изменения
+                </button>
+            </div>
+        </form>
+        
+        <div class="delete-section">
+            <h3>Опасная зона</h3>
+            <p>Удаление проекта невозможно отменить. Все связанные данные будут удалены.</p>
+            
+            <form id="deleteForm" action="/projects/<%= project.id %>" method="POST" 
+                  onsubmit="return confirm('Вы уверены, что хотите удалить проект? Это действие необратимо.');">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit" class="btn-profile">
+                    Удалить проект
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Валидация дат
+        const startDateInput = document.getElementById('startDate');
+        const deadlineInput = document.getElementById('deadline');
+        
+        if (startDateInput && deadlineInput) {
+            // Установить минимальную дату для дедлайна на основе даты начала
+            startDateInput.addEventListener('change', function() {
+                deadlineInput.min = this.value;
+                
+                // Если дедлайн раньше новой даты начала, сбрасываем его
+                if (deadlineInput.value && new Date(deadlineInput.value) < new Date(this.value)) {
+                    deadlineInput.value = this.value;
+                }
+            });
+            
+            // Установить максимальную дату для даты начала на основе дедлайна
+            deadlineInput.addEventListener('change', function() {
+                startDateInput.max = this.value;
+                
+                // Если дата начала позже нового дедлайна, сбрасываем ее
+                if (startDateInput.value && new Date(startDateInput.value) > new Date(this.value)) {
+                    startDateInput.value = this.value;
+                }
+            });
+        }
+        
+        // Предотвращение отправки формы, если даты невалидны
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const startDate = new Date(startDateInput.value);
+            const deadline = new Date(deadlineInput.value);
+            
+            if (deadline <= startDate) {
+                e.preventDefault();
+                alert('Ошибка: Дедлайн должен быть позже даты начала');
+                deadlineInput.focus();
+                return false;
+            }
+            
+            return true;
+        });
+    </script>
+</body>
+</html>

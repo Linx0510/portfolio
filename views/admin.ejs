@@ -1,21 +1,3 @@
-<% 
-// Считаем статистику пользователей в EJS
-let adminCount = 0;
-let userCount = 0;
-let totalProjects = 0;
-let activeProjects = 0;
-
-if (locals.users && Array.isArray(locals.users)) {
-    locals.users.forEach(user => {
-        if (user.role === 'Администратор') {
-            adminCount++;
-        } else {
-            userCount++;
-        }
-    });
-}
-%>
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -24,746 +6,614 @@ if (locals.users && Array.isArray(locals.users)) {
     <title><%= title %></title>
 </head>
 <body>
+
     <div class="admin-container">
         <div class="admin-header">
             <div class="header-left">
-                <h1>ДОБРО ПОЖАЛОВАТЬ,</h1>
-                <p class="admin-subtitle">Управляйте своими заказми и отслеживайте прогресс</p>
+                <h1>ДОБРО ПОЖАЛОВАТЬ, <%= user.name %></h1>
+                <p class="admin-subtitle">Управляйте проектами и пользователями</p>
             </div>
             <div class="header-actions">
                 <a href="/profile" class="btn-profile">
-                    <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M7 8C4.78125 8 3 6.21875 3 4C3 1.8125 4.78125 0 7 0C9.1875 0 11 1.8125 11 4C11 6.21875 9.1875 8 7 8ZM9.78125 9C12.0938 9 14 10.9062 14 13.2188V14.5C14 15.3438 13.3125 16 12.5 16H1.5C0.65625 16 0 15.3438 0 14.5V13.2188C0 10.9062 1.875 9 4.1875 9H4.71875C5.40625 9.34375 6.1875 9.5 7 9.5C7.8125 9.5 8.5625 9.34375 9.25 9H9.78125Z" fill="#F0F0F0"/>
-                    </svg>
                     ПРОФИЛЬ
                 </a>
             </div>
         </div>
-            
-            <div class="admin-stats">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <svg width="21" height="24" viewBox="0 0 21 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10.5 12C7.17188 12 4.5 9.32812 4.5 6C4.5 2.71875 7.17188 0 10.5 0C13.7812 0 16.5 2.71875 16.5 6C16.5 9.32812 13.7812 12 10.5 12ZM14.6719 13.5C18.1406 13.5 21 16.3594 21 19.8281V21.75C21 23.0156 19.9688 24 18.75 24H2.25C0.984375 24 0 23.0156 0 21.75V19.8281C0 16.3594 2.8125 13.5 6.28125 13.5H7.07812C8.10938 14.0156 9.28125 14.25 10.5 14.25C11.7188 14.25 12.8438 14.0156 13.875 13.5H14.6719Z" fill="#CC0D9C"/>
-                        </svg>
-                    </div>
-                    <h3 id="total-users"><%= locals.users ? locals.users.length : 0 %></h3>
-                    <p>Всего пользователей</p>
+        
+        <div class="admin-stats">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg width="21" height="24" viewBox="0 0 21 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10.5 12C7.17188 12 4.5 9.32812 4.5 6C4.5 2.71875 7.17188 0 10.5 0C13.7812 0 16.5 2.71875 16.5 6C16.5 9.32812 13.7812 12 10.5 12ZM14.6719 13.5C18.1406 13.5 21 16.3594 21 19.8281V21.75C21 23.0156 19.9688 24 18.75 24H2.25C0.984375 24 0 23.0156 0 21.75V19.8281C0 16.3594 2.8125 13.5 6.28125 13.5H7.07812C8.10938 14.0156 9.28125 14.25 10.5 14.25C11.7188 14.25 12.8438 14.0156 13.875 13.5H14.6719Z" fill="#CC0D9C"/>
+                    </svg>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <svg width="28" height="27" viewBox="0 0 28 27" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M15.4252 0.335984C14.5259 -0.107263 13.2908 -0.11392 12.3853 0.327752C8.51732 2.21439 5.0123 4.37598 1.94335 6.771C1.53411 7.09038 1.26329 7.53738 1.26793 8.0483C1.27255 8.55748 1.54952 8.9995 1.95741 9.31449C5.00166 11.6654 8.51063 13.8295 12.3083 15.7014C13.2075 16.1447 14.4427 16.1514 15.3482 15.7097C19.2161 13.823 22.7211 11.6615 25.7901 9.26643C26.1993 8.94706 26.4701 8.50006 26.4655 7.98913C26.4609 7.47995 26.1839 7.03793 25.776 6.72294C22.7318 4.37207 19.2228 2.20793 15.4252 0.335984Z" fill="#0041CE"/>
-                            <path d="M27.3038 14.7145C27.8308 14.4037 27.9913 13.7483 27.6623 13.2505C27.3332 12.7527 26.6392 12.6012 26.1122 12.9119L16.9513 18.3135C16.1353 18.7947 15.0266 19.063 13.8665 19.063C12.7063 19.0631 11.5975 18.7949 10.7813 18.3138L1.72078 12.9734C1.19369 12.6627 0.499722 12.8144 0.170766 13.3122C-0.158191 13.81 0.00243026 14.4654 0.529523 14.7761L9.59002 20.1166C10.8333 20.8494 12.3757 21.1881 13.8666 21.188C15.3575 21.1879 16.8998 20.849 18.1429 20.1161L27.3038 14.7145Z" fill="#0041CE"/>
-                            <path d="M27.3039 20.0336C27.8309 19.7228 27.9913 19.0673 27.6622 18.5696C27.3331 18.0719 26.6391 17.9204 26.1121 18.2312L18.1787 22.9102C17.0194 23.594 15.4687 23.9636 13.8664 23.9637C12.2641 23.9637 10.7132 23.5943 9.55369 22.9107L1.72089 18.2926C1.19384 17.9819 0.499857 18.1335 0.170837 18.6313C-0.158183 19.129 0.00235498 19.7845 0.529408 20.0952L8.3622 24.7133C9.94888 25.6488 11.9335 26.0888 13.8665 26.0887C15.7996 26.0885 17.7841 25.6483 19.3705 24.7126L27.3039 20.0336Z" fill="#0041CE"/>
-                        </svg>
-
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="total-projects">0</h3>
-                        <p>Всего проектов</p>
-                    </div>
+                <h3 id="total-users"><%= users ? users.length : 0 %></h3>
+                <p>Всего пользователей</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg width="28" height="27" viewBox="0 0 28 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15.4252 0.335984C14.5259 -0.107263 13.2908 -0.11392 12.3853 0.327752C8.51732 2.21439 5.0123 4.37598 1.94335 6.771C1.53411 7.09038 1.26329 7.53738 1.26793 8.0483C1.27255 8.55748 1.54952 8.9995 1.95741 9.31449C5.00166 11.6654 8.51063 13.8295 12.3083 15.7014C13.2075 16.1447 14.4427 16.1514 15.3482 15.7097C19.2161 13.823 22.7211 11.6615 25.7901 9.26643C26.1993 8.94706 26.4701 8.50006 26.4655 7.98913C26.4609 7.47995 26.1839 7.03793 25.776 6.72294C22.7318 4.37207 19.2228 2.20793 15.4252 0.335984Z" fill="#0041CE"/>
+                        <path d="M27.3038 14.7145C27.8308 14.4037 27.9913 13.7483 27.6623 13.2505C27.3332 12.7527 26.6392 12.6012 26.1122 12.9119L16.9513 18.3135C16.1353 18.7947 15.0266 19.063 13.8665 19.063C12.7063 19.0631 11.5975 18.7949 10.7813 18.3138L1.72078 12.9734C1.19369 12.6627 0.499722 12.8144 0.170766 13.3122C-0.158191 13.81 0.00243026 14.4654 0.529523 14.7761L9.59002 20.1166C10.8333 20.8494 12.3757 21.1881 13.8666 21.188C15.3575 21.1879 16.8998 20.849 18.1429 20.1161L27.3038 14.7145Z" fill="#0041CE"/>
+                        <path d="M27.3039 20.0336C27.8309 19.7228 27.9913 19.0673 27.6622 18.5696C27.3331 18.0719 26.6391 17.9204 26.1121 18.2312L18.1787 22.9102C17.0194 23.594 15.4687 23.9636 13.8664 23.9637C12.2641 23.9637 10.7132 23.5943 9.55369 22.9107L1.72089 18.2926C1.19384 17.9819 0.499857 18.1335 0.170837 18.6313C-0.158183 19.129 0.00235498 19.7845 0.529408 20.0952L8.3622 24.7133C9.94888 25.6488 11.9335 26.0888 13.8665 26.0887C15.7996 26.0885 17.7841 25.6483 19.3705 24.7126L27.3039 20.0336Z" fill="#0041CE"/>
+                    </svg>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5.27131 5.29718C7.18685 3.37505 9.83392 2.1875 12.7604 2.1875C18.5997 2.1875 23.3333 6.92116 23.3333 12.7604C23.3333 18.5997 18.5997 23.3333 12.7604 23.3333C6.92116 23.3333 2.1875 18.5997 2.1875 12.7604C2.1875 12.1564 1.69781 11.6667 1.09375 11.6667C0.489689 11.6667 0 12.1564 0 12.7604C0 19.8078 5.71303 25.5208 12.7604 25.5208C19.8078 25.5208 25.5208 19.8078 25.5208 12.7604C25.5208 5.71303 19.8078 0 12.7604 0C9.22908 0 6.03105 1.43591 3.72186 3.75305C3.68474 3.79029 3.65087 3.82954 3.62023 3.87044L1.78628 2.03648C1.58622 1.83642 1.28848 1.77015 1.02245 1.86647C0.756424 1.96278 0.570124 2.2043 0.544509 2.48607L0.0289099 8.15765C0.00931776 8.37317 0.0864642 8.58625 0.239483 8.73927C0.392503 8.89229 0.605585 8.96943 0.821098 8.94984L6.49268 8.43424C6.77445 8.40863 7.01597 8.22233 7.11228 7.9563C7.2086 7.69027 7.14233 7.39253 6.94227 7.19247L5.15127 5.40147C5.19315 5.3701 5.23328 5.33534 5.27131 5.29718Z" fill="#E98E16"/>
-                            <path d="M13.8542 5.46875C13.8542 4.86469 13.3645 4.375 12.7604 4.375C12.1564 4.375 11.6667 4.86469 11.6667 5.46875V12.7604C11.6667 13.1375 11.8609 13.488 12.1807 13.6879L16.5557 16.4223C17.068 16.7424 17.7428 16.5867 18.0629 16.0745C18.3831 15.5622 18.2273 14.8874 17.7151 14.5673L13.8542 12.1542V5.46875Z" fill="#E98E16"/>
-                        </svg>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="active-projects">0</h3>
-                        <p>Активных проектов</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M17.5003 32.0833C21.5274 32.0833 25.1732 30.451 27.8123 27.8119C30.4513 25.1728 32.0837 21.527 32.0837 17.5C32.0837 13.4729 30.4513 9.82708 27.8123 7.18798C25.1732 4.54892 21.5274 2.91663 17.5003 2.91663C13.4733 2.91663 9.82745 4.54892 7.18835 7.18798C4.54929 9.82708 2.91699 13.4729 2.91699 17.5C2.91699 21.527 4.54929 25.1728 7.18835 27.8119C9.82745 30.451 13.4733 32.0833 17.5003 32.0833Z" fill="#3DCC0D"/>
-                            <path d="M11.667 17.5L16.042 21.875L24.792 13.125" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="end-projects">0</h3>
-                        <p>Завершенных проектов</p>
-                    </div>
+                <div class="stat-info">
+                    <h3 id="total-projects"><%= totalProjects %></h3>
+                    <p>Всего проектов</p>
                 </div>
             </div>
-            
-            <div class="admin-content">
-                <!-- Tabs Navigation -->
-                <div class="tabs">
-                    <button class="tab active" onclick="switchTab('users')">
-                        <i class="fas fa-users"></i> Пользователи
-                    </button>
-                    <button class="tab" onclick="switchTab('projects')">
-                        <i class="fas fa-project-diagram"></i> Проекты
-                    </button>
-                    <button class="tab" onclick="switchTab('add-project')">
-                        <i class="fas fa-plus-circle"></i> Добавить проект
-                    </button>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10.0106 10.0368C11.9261 8.11467 14.5732 6.92712 17.4997 6.92712C23.3389 6.92712 28.0726 11.6608 28.0726 17.5C28.0726 23.3393 23.3389 28.073 17.4997 28.073C11.6604 28.073 6.92676 23.3393 6.92676 17.5C6.92676 16.896 6.43707 16.4063 5.83301 16.4063C5.22895 16.4063 4.73926 16.896 4.73926 17.5C4.73926 24.5474 10.4523 30.2605 17.4997 30.2605C24.5471 30.2605 30.2601 24.5474 30.2601 17.5C30.2601 10.4527 24.5471 4.73962 17.4997 4.73962C13.9683 4.73962 10.7703 6.17553 8.46111 8.49267C8.424 8.52991 8.39013 8.56916 8.35949 8.61006L6.52554 6.77611C6.32548 6.57605 6.02774 6.50977 5.76171 6.60609C5.49568 6.70241 5.30938 6.94392 5.28377 7.22569L4.76817 12.8973C4.74858 13.1128 4.82572 13.3259 4.97874 13.4789C5.13176 13.6319 5.34484 13.7091 5.56036 13.6895L11.2319 13.1739C11.5137 13.1483 11.7552 12.962 11.8515 12.6959C11.9479 12.4299 11.8816 12.1322 11.6815 11.9321L9.89052 10.1411C9.9324 10.1097 9.97254 10.075 10.0106 10.0368Z" fill="#E98E16"/>
+                        <path d="M18.5934 10.2084C18.5934 9.60431 18.1037 9.11462 17.4997 9.11462C16.8956 9.11462 16.4059 9.60431 16.4059 10.2084V17.5C16.4059 17.8772 16.6002 18.2277 16.92 18.4275L21.295 21.1619C21.8072 21.4821 22.482 21.3263 22.8022 20.8141C23.1223 20.3019 22.9666 19.6271 22.4544 19.3069L18.5934 16.8938V10.2084Z" fill="#E98E16"/>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <h3 id="active-projects"><%= activeProjects %></h3>
+                    <p>Активных проектов</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.5003 32.0833C21.5274 32.0833 25.1732 30.451 27.8123 27.8119C30.4513 25.1728 32.0837 21.527 32.0837 17.5C32.0837 13.4729 30.4513 9.82708 27.8123 7.18798C25.1732 4.54892 21.5274 2.91663 17.5003 2.91663C13.4733 2.91663 9.82745 4.54892 7.18835 7.18798C4.54929 9.82708 2.91699 13.4729 2.91699 17.5C2.91699 21.527 4.54929 25.1728 7.18835 27.8119C9.82745 30.451 13.4733 32.0833 17.5003 32.0833Z" fill="#3DCC0D"/>
+                        <path d="M11.667 17.5L16.042 21.875L24.792 13.125" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <h3 id="end-projects"><%= completedProjects %></h3>
+                    <p>Завершенных проектов</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Таблица пользователей -->
+        <div class="tables-container">
+            <div class="table-section">
+                <div class="section-header">
+                    <h2>Пользователи системы</h2>
                 </div>
                 
-                <!-- Users Tab -->
-                <div id="users-tab" class="tab-content active">
-                    <div class="content-header">
-                        <h2><i class="fas fa-list"></i> Список пользователей</h2>
-                        <button class="btn btn-success" onclick="refreshUsers()">
-                            <i class="fas fa-sync-alt"></i> Обновить
-                        </button>
-                    </div>
-                    
-                    <% if (locals.users && locals.users.length > 0) { %>
-                        <div class="table-responsive">
-                            <table class="data-table">
-                                <thead>
+                <div class="table-wrapper">
+                    <% if (users && users.length > 0) { %>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Имя</th>
+                                    <th>Email</th>
+                                    <th>Роль</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% users.slice(0, 5).forEach(user => { %>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Имя</th>
-                                        <th>Email (логин)</th>
-                                        <th>Роль</th>
-                                        <th>Дата регистрации</th>
-                                        <th>Действия</th>
+                                        <td><%= user.id || 'N/A' %></td>
+                                        <td><%= user.name || 'Без имени' %></td>
+                                        <td><%= user.email || 'N/A' %></td>
+                                        <td>
+                                            <% if (user.role === 'Админ') { %>
+                                                <span class="role-admin"><%= user.role %></span>
+                                            <% } else { %>
+                                                <span class="role-user"><%= user.role || 'Пользователь' %></span>
+                                            <% } %>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    <% locals.users.forEach(user => { %>
-                                        <tr>
-                                            <td><strong><%= user.id %></strong></td>
-                                            <td>
-                                                <div style="display: flex; align-items: center; gap: 10px;">
-                                                    <div style="width: 36px; height: 36px; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600;">
-                                                        <%= user.name.charAt(0).toUpperCase() %>
-                                                    </div>
-                                                    <%= user.name %>
-                                                </div>
-                                            </td>
-                                            <td><%= user.email %></td>
-                                            <td>
-                                                <span class="badge <%= user.role === 'Администратор' ? 'badge-admin' : 'badge-user' %>">
-                                                    <%= user.role %>
-                                                </span>
-                                            </td>
-                                            <td><%= new Date(user.createdAt).toLocaleDateString('ru-RU') %></td>
-                                            <td>
-                                                <div class="action-buttons">
-                                                    <button class="btn-action btn-edit" onclick="editUser('<%= user.id %>')" title="Изменить роль">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
-                                                    <% if (user.role !== 'Администратор') { %>
-                                                        <button class="btn-action btn-delete" onclick="deleteUser('<%= user.id %>')" title="Удалить">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
-                                                    <% } %>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    <% }) %>
-                                </tbody>
-                            </table>
-                        </div>
+                                <% }); %>
+                            </tbody>
+                        </table>
                     <% } else { %>
-                        <div class="empty-state">
-                            <i class="fas fa-users-slash"></i>
-                            <p>Нет зарегистрированных пользователей</p>
-                        </div>
+                        <div class="no-data">Нет данных о пользователях</div>
                     <% } %>
                 </div>
-                
-                <!-- Projects Tab -->
-                <div id="projects-tab" class="tab-content">
-                    <div class="content-header">
-                        <h2><i class="fas fa-project-diagram"></i> Список проектов</h2>
-                        <div>
-                            <button class="btn btn-success" onclick="loadProjects()">
-                                <i class="fas fa-sync-alt"></i> Обновить
-                            </button>
-                            <button class="btn btn-primary" onclick="switchTab('add-project')">
-                                <i class="fas fa-plus"></i> Новый проект
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div id="projects-container">
-                        <div class="empty-state">
-                            <i class="fas fa-spinner fa-spin"></i>
-                            <p>Загрузка проектов...</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Add Project Tab -->
-                <div id="add-project-tab" class="tab-content">
-                    <div class="content-header">
-                        <h2><i class="fas fa-plus-circle"></i> Создание нового проекта</h2>
-                        <button class="btn btn-secondary" onclick="switchTab('projects')">
-                            <i class="fas fa-arrow-left"></i> Назад к проектам
-                        </button>
-                    </div>
-                    
-                    <div class="form-container">
-                        <div class="form-card">
-                            <form id="projectForm" onsubmit="createProject(event)">
-                                <div class="form-group">
-                                    <label class="form-label required">Название проекта</label>
-                                    <input type="text" id="projectName" class="form-control" required placeholder="Введите название проекта">
-                                    <div class="error-message" id="nameError"></div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label class="form-label">Описание проекта</label>
-                                    <textarea id="projectDescription" class="form-control" placeholder="Опишите проект..."></textarea>
-                                </div>
-                                
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label class="form-label required">Дата начала</label>
-                                        <input type="date" id="startDate" class="form-control" required>
-                                        <div class="error-message" id="startDateError"></div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label class="form-label required">Дедлайн</label>
-                                        <input type="date" id="deadline" class="form-control" required>
-                                        <div class="error-message" id="deadlineError"></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label class="form-label required">Бюджет (₽)</label>
-                                        <input type="number" id="budget" class="form-control" required min="0" step="0.01" placeholder="0.00">
-                                        <div class="error-message" id="budgetError"></div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label class="form-label required">Тип проекта</label>
-                                        <select id="projectType" class="form-control" required>
-                                            <option value="">Выберите тип проекта</option>
-                                            <!-- Типы будут загружены динамически -->
-                                        </select>
-                                        <div class="error-message" id="typeError"></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label class="form-label required">Клиент</label>
-                                        <select id="clientId" class="form-control" required>
-                                            <option value="">Выберите клиента</option>
-                                            <!-- Клиенты будут загружены динамически -->
-                                        </select>
-                                        <div class="error-message" id="clientError"></div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label class="form-label">Статус проекта</label>
-                                        <select id="status" class="form-control">
-                                            <option value="planned">Запланирован</option>
-                                            <option value="in_progress">В работе</option>
-                                            <option value="on_hold">На паузе</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label class="form-label">Примечания</label>
-                                    <textarea id="notes" class="form-control" placeholder="Дополнительные примечания..."></textarea>
-                                </div>
-                                
-                                <div class="form-actions">
-                                    <button type="button" class="btn btn-secondary" onclick="switchTab('projects')">
-                                        <i class="fas fa-times"></i> Отмена
-                                    </button>
-                                    <button type="submit" class="btn btn-success">
-                                        <i class="fas fa-check"></i> Создать проект
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
             </div>
             
-            <div class="admin-footer">
-                <div>
-                    <p>Текущее время: <span id="current-time"></span></p>
+            <!-- Таблица проектов -->
+            <div class="table-section">
+                <div class="section-header">
+                    <h2>Последние проекты</h2>
+                    <div class="actions">
+                        <button class="btn-profile" id="addProjectBtn">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 1V15M1 8H15" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            Добавить проект
+                        </button>
+                    </div>
                 </div>
-                <div>
-                    <p>Админ-панель LINX v2.0</p>
+                
+                <div class="table-wrapper">
+                    <% if (projects && projects.length > 0) { %>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Название</th>
+                                    <th>Пользователь</th>
+                                    <th>Статус</th>
+                                    <th>Срок</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% projects.forEach(project => { %>
+                                    <tr>
+                                        <td><%= project.id || 'N/A' %></td>
+                                        <td><%= project.name || 'Без названия' %></td>
+                                        <td>
+                                            <% if (project.projectUser) { %>
+                                                <%= project.projectUser.name || 'N/A' %>
+                                            <% } else { %>
+                                                N/A
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <span class="status <%= project.status === 'in_progress' ? 'status-active' : project.status === 'completed' ? 'status-completed' : 'status-pending' %>">
+                                                <%= project.status === 'planned' ? 'Запланирован' : 
+                                                   project.status === 'in_progress' ? 'В работе' : 
+                                                   project.status === 'completed' ? 'Завершен' : 
+                                                   project.status === 'on_hold' ? 'Приостановлен' : 
+                                                   project.status === 'cancelled' ? 'Отменен' : project.status %>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <% if (project.deadline) { %>
+                                                <%= new Date(project.deadline).toLocaleDateString('ru-RU') %>
+                                            <% } else { %>
+                                                Не указан
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <div class="actions">
+                                                <!-- Новая кнопка для страницы редактирования -->
+                                                <a href="/projects/<%= project.id %>/edit" class="btn-profile edit-btn" title="Редактировать проект">
+                                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M11.3333 2.33333C11.5084 2.15833 11.7167 2.07167 11.9583 2.07333C12.2 2.075 12.4083 2.16333 12.5833 2.33833L13.6667 3.41667C13.8417 3.59167 13.9333 3.8 13.9417 4.04167C13.95 4.28333 13.8667 4.49167 13.6917 4.66667L6.69167 11.6667C6.60278 11.7556 6.5 11.8194 6.38333 11.8583L4.08333 12.625C3.93056 12.6806 3.77778 12.6806 3.625 12.625C3.47222 12.5694 3.36111 12.4806 3.29167 12.3583C3.22222 12.2361 3.19444 12.0972 3.20833 11.9417L3.375 9.61667C3.40278 9.48611 3.46111 9.37778 3.55 9.29167L10.55 2.29167C10.625 2.21667 10.7083 2.16667 10.8 2.14167C10.8917 2.11667 10.9833 2.11667 11.075 2.14167C11.1667 2.16667 11.25 2.21667 11.325 2.29167L11.3333 2.33333ZM5.04167 10.1583L10.7833 4.41667L11.5833 5.21667L5.84167 10.9583L4.70833 11.2917L5.04167 10.1583ZM12.45 3.55L11.6667 2.76667L10.7833 3.65L11.5833 4.45L12.45 3.55Z" fill="white"/>
+                                                    </svg>
+                                                </a>
+                                                
+                                                <!-- Кнопка удаления -->
+                                                <button class="btn-profile delete-btn" data-project-id="<%= project.id %>" title="Удалить проект">
+                                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M4 3.33333H3.33333V4.66667H4V13.3333C4 14.0667 4.6 14.6667 5.33333 14.6667H10.6667C11.4 14.6667 12 14.0667 12 13.3333V4.66667H12.6667V3.33333H12V2.66667C12 1.93333 11.4 1.33333 10.6667 1.33333H5.33333C4.6 1.33333 4 1.93333 4 2.66667V3.33333ZM5.33333 2.66667H10.6667V3.33333H5.33333V2.66667ZM10.6667 13.3333H5.33333V4.66667H10.6667V13.3333ZM6.66667 6V12H8V6H6.66667ZM8.66667 6V12H10V6H8.66667Z" fill="white"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    <% } else { %>
+                        <div class="no-data">Нет данных о проектах</div>
+                    <% } %>
                 </div>
             </div>
+        </div>
+        
+        <div class="add-project-form" id="addProjectForm" style="display: none">
+            <div class="form-header">
+                <h2>Добавить проект</h2>
+            </div>
+            <form id="projectForm" action="/projects" method="POST">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">НАЗВАНИЕ</label>
+                        <input type="text" id="name" name="name" required placeholder="Введите название" class="input-group">
+                    </div>
+                    <div class="form-group">
+                        <label for="userId">КЛИЕНТ</label>
+                        <select id="userId" name="userId" required class="input-group">
+                            <option value="">Выберите пользователя</option>
+                            <% if (regularUsers && regularUsers.length > 0) { %>
+                                <% regularUsers.forEach(function(user) { %>
+                                    <option value="<%= user.id %>">
+                                        <%= user.name %> (<%= user.email %>)
+                                    </option>
+                                <% }); %>
+                            <% } else { %>
+                                <option value="" disabled>Нет пользователей</option>
+                            <% } %>
+                        </select>
+                        <small class="form-hint">Только пользователи с ролью "Пользователь"</small>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="projectTypeId">ТИП ПРОЕКТА</label>
+                        <select id="projectTypeId" name="projectTypeId" required class="input-group">
+                            <option value="">Выберите тип</option>
+                            <% if (projectTypes && projectTypes.length > 0) { %>
+                                <% projectTypes.forEach(function(type) { %>
+                                    <option value="<%= type.id %>"><%= type.name %></option>
+                                <% }); %>
+                            <% } else { %>
+                                <option value="" disabled>Нет типов проектов</option>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="budget">БЮДЖЕТ</label>
+                        <input type="number" id="budget" name="budget" min="0" step="1000" required placeholder="₽" class="input-group">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="startDate">ДАТА НАЧАЛА</label>
+                        <input type="date" id="startDate" name="startDate" required class="input-group">
+                    </div>
+                    <div class="form-group">
+                        <label for="deadline">КРАЙНИЙ СРОК</label>
+                        <input type="date" id="deadline" name="deadline" required class="input-group">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="description">ОПИСАНИЕ/ТЗ</label>
+                        <textarea id="description" name="description" rows="3" placeholder="Описание проекта" class="input-group"></textarea>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="notes">ЗАМЕТКИ</label>
+                        <textarea id="notes" name="notes" rows="2" class="input-group"></textarea>
+                    </div>
+                </div>
+                <div class="form-actions" style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 30px;">
+                    <button type="button" class="btn-profile" id="cancelBtn">
+                        Отмена
+                    </button>
+                    <button type="submit" class="btn-profile" id="submitBtn">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M13.3333 4L5.99996 11.3333L2.66663 8" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Добавить проект
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Модальное окно редактирования проекта -->
+    <div class="modal-overlay" id="editModal" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Редактировать проект</h2>
+                <button class="modal-close" id="modalCloseBtn">×</button>
+            </div>
+            <form id="editProjectForm" method="POST">
+                <input type="hidden" id="editProjectId" name="projectId">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editName">НАЗВАНИЕ</label>
+                        <input type="text" id="editName" name="name" required placeholder="Введите название" class="input-group">
+                    </div>
+                    <div class="form-group">
+                        <label for="editUserId">ПОЛЬЗОВАТЕЛЬ</label>
+                        <select id="editUserId" name="userId" required class="input-group">
+                            <option value="">Выберите пользователя</option>
+                            <% if (regularUsers && regularUsers.length > 0) { %>
+                                <% regularUsers.forEach(function(user) { %>
+                                    <option value="<%= user.id %>">
+                                        <%= user.name %> (<%= user.email %>)
+                                    </option>
+                                <% }); %>
+                            <% } else { %>
+                                <option value="" disabled>Нет пользователей</option>
+                            <% } %>
+                        </select>
+                        <small class="form-hint">Только пользователи с ролью "Пользователь"</small>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editProjectTypeId">ТИП ПРОЕКТА</label>
+                        <select id="editProjectTypeId" name="projectTypeId" required class="input-group">
+                            <option value="">Выберите тип</option>
+                            <% if (projectTypes && projectTypes.length > 0) { %>
+                                <% projectTypes.forEach(function(type) { %>
+                                    <option value="<%= type.id %>"><%= type.name %></option>
+                                <% }); %>
+                            <% } else { %>
+                                <option value="" disabled>Нет типов проектов</option>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editBudget">БЮДЖЕТ</label>
+                        <input type="number" id="editBudget" name="budget" min="0" step="1000" required placeholder="₽" class="input-group">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editStartDate">ДАТА НАЧАЛА</label>
+                        <input type="date" id="editStartDate" name="startDate" required class="input-group">
+                    </div>
+                    <div class="form-group">
+                        <label for="editDeadline">КРАЙНИЙ СРОК</label>
+                        <input type="date" id="editDeadline" name="deadline" required class="input-group">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editStatus">СТАТУС</label>
+                        <select id="editStatus" name="status" required class="input-group">
+                            <option value="planned">Запланирован</option>
+                            <option value="in_progress">В работе</option>
+                            <option value="on_hold">Приостановлен</option>
+                            <option value="completed">Завершен</option>
+                            <option value="cancelled">Отменен</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editProgress">ПРОГРЕСС (%)</label>
+                        <input type="number" id="editProgress" name="progress" min="0" max="100" step="5" required class="input-group">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="editDescription">ОПИСАНИЕ/ТЗ</label>
+                        <textarea id="editDescription" name="description" rows="3" placeholder="Описание проекта" class="input-group"></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="editNotes">ЗАМЕТКИ</label>
+                        <textarea id="editNotes" name="notes" rows="2" class="input-group"></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn-profile" id="cancelEditBtn">
+                        Отмена
+                    </button>
+                    <button type="submit" class="btn-profile" id="editSubmitBtn">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M13.3333 4L5.99996 11.3333L2.66663 8" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Сохранить изменения
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
     <script>
-    // Обновление текущего времени
-    function updateTime() {
-        const now = new Date();
-        const dateString = now.toLocaleDateString('ru-RU', { 
-            weekday: 'long', 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric' 
-        });
-        const timeString = now.toLocaleTimeString('ru-RU');
-        document.getElementById('current-time').textContent = `${dateString}, ${timeString}`;
-    }
-
-    setInterval(updateTime, 1000);
-    updateTime();
-
-    // Загрузка статистики проектов
-    async function loadProjectStats() {
-        try {
-            const response = await fetch('/api/projects/stats');
-            const stats = await response.json();
-            
-            document.getElementById('total-projects').textContent = stats.totalProjects || 0;
-            
-            const activeProjects = stats.projectsByStatus?.find(s => s.status === 'in_progress')?.count || 0;
-            document.getElementById('active-projects').textContent = activeProjects;
-        } catch (error) {
-            console.error('Ошибка загрузки статистики:', error);
-        }
-    }
-
-    // Загрузка проектов
-    async function loadProjects() {
-        try {
-            const response = await fetch('/api/projects');
-            const projects = await response.json();
-            
-            const container = document.getElementById('projects-container');
-            if (!container) return;
-            
-            if (!projects || projects.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-project-diagram"></i>
-                        <p>Нет созданных проектов</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = projects.map(project => `
-                <div class="project-card">
-                    <div class="project-header">
-                        <div class="project-title">${project.name}</div>
-                        <div class="project-actions">
-                            <a href="/projects/${project.id}" class="btn-action btn-view" title="Просмотр">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <button class="btn-action btn-edit" onclick="editProject(${project.id})" title="Редактировать">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn-action btn-delete" onclick="deleteProject(${project.id})" title="Удалить">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="project-meta">
-                        <div class="meta-item">
-                            <i class="fas fa-user"></i>
-                            <span>${project.client?.name || 'Клиент не указан'}</span>
-                        </div>
-                        <div class="meta-item">
-                            <i class="fas fa-tag"></i>
-                            <span>${project.ProjectType?.name || 'Без типа'}</span>
-                        </div>
-                        <div class="meta-item">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span>${new Date(project.deadline).toLocaleDateString('ru-RU')}</span>
-                        </div>
-                        <div class="meta-item">
-                            <i class="fas fa-money-bill-wave"></i>
-                            <span>${formatCurrency(project.budget || 0)}</span>
-                        </div>
-                    </div>
-                    
-                    ${project.description ? `
-                    <div style="margin-bottom: 15px; padding: 15px; background: #f8fafc; border-radius: 8px; font-size: 14px; color: #4b5563;">
-                        <strong>Описание:</strong> ${project.description.substring(0, 100)}${project.description.length > 100 ? '...' : ''}
-                    </div>
-                    ` : ''}
-                    
-                    <div class="project-progress">
-                        <div class="progress-header">
-                            <div class="progress-label">Прогресс выполнения</div>
-                            <div class="progress-percent">${project.progress || 0}%</div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${project.progress || 0}%"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="project-footer">
-                        <span class="badge badge-project status-${project.status}">
-                            ${getStatusText(project.status)}
-                        </span>
-                        <span>Создан: ${formatDate(project.createdAt)}</span>
-                    </div>
-                </div>
-            `).join('');
-        } catch (error) {
-            console.error('Ошибка загрузки проектов:', error);
-            document.getElementById('projects-container').innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <p>Ошибка загрузки проектов</p>
-                </div>
-            `;
-        }
-    }
-
-    // Загрузка данных для формы
-    async function loadFormData() {
-        try {
-            // Загрузка типов проектов
-            const typesResponse = await fetch('/api/project-types');
-            const types = await typesResponse.json();
-            
-            const typeSelect = document.getElementById('projectType');
-            typeSelect.innerHTML = '<option value="">Выберите тип проекта</option>' +
-                types.map(type => `<option value="${type.id}">${type.name}</option>`).join('');
-            
-            // Загрузка клиентов (пользователей с ролью пользователь)
-            const clientsResponse = await fetch('/api/users/clients');
-            const clients = await clientsResponse.json();
-            
-            const clientSelect = document.getElementById('clientId');
-            clientSelect.innerHTML = '<option value="">Выберите клиента</option>' +
-                clients.map(client => `<option value="${client.id}">${client.name} (${client.email})</option>`).join('');
-            
-            // Устанавливаем даты по умолчанию
+        document.addEventListener('DOMContentLoaded', function() {
+            // Инициализация дат
             const today = new Date().toISOString().split('T')[0];
-            const nextMonth = new Date();
-            nextMonth.setMonth(nextMonth.getMonth() + 1);
-            const nextMonthStr = nextMonth.toISOString().split('T')[0];
+            const startDateInput = document.getElementById('startDate');
+            const deadlineInput = document.getElementById('deadline');
             
-            document.getElementById('startDate').value = today;
-            document.getElementById('deadline').value = nextMonthStr;
-            document.getElementById('deadline').min = today;
+            if (startDateInput) {
+                startDateInput.min = today;
+                startDateInput.value = today;
+            }
             
-        } catch (error) {
-            console.error('Ошибка загрузки данных формы:', error);
-            alert('Ошибка загрузки данных формы');
-        }
-    }
-
-    // Создание проекта
-    async function createProject(event) {
-        event.preventDefault();
-        
-        // Сбор данных формы
-        const projectData = {
-            name: document.getElementById('projectName').value.trim(),
-            description: document.getElementById('projectDescription').value.trim(),
-            startDate: document.getElementById('startDate').value,
-            deadline: document.getElementById('deadline').value,
-            budget: parseFloat(document.getElementById('budget').value),
-            projectTypeId: parseInt(document.getElementById('projectType').value),
-            clientId: parseInt(document.getElementById('clientId').value),
-            status: document.getElementById('status').value,
-            notes: document.getElementById('notes').value.trim()
-        };
-        
-        // Валидация
-        if (!validateProjectForm(projectData)) {
-            return;
-        }
-        
-        try {
-            const response = await fetch('/projects', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(projectData)
+            if (deadlineInput) {
+                // Установить дедлайн на 30 дней от сегодня
+                const futureDate = new Date();
+                futureDate.setDate(futureDate.getDate() + 30);
+                deadlineInput.min = today;
+                deadlineInput.value = futureDate.toISOString().split('T')[0];
+            }
+            
+            // Установка минимальной даты для дедлайна на основе даты начала
+            if (deadlineInput && startDateInput) {
+                startDateInput.addEventListener('change', function() {
+                    deadlineInput.min = this.value;
+                    
+                    // Если дедлайн раньше новой даты начала, сбрасываем его
+                    if (deadlineInput.value && new Date(deadlineInput.value) < new Date(this.value)) {
+                        deadlineInput.value = this.value;
+                    }
+                });
+            }
+            
+            // Обработка отправки формы добавления проекта
+            document.getElementById('projectForm')?.addEventListener('submit', function(e) {
+                // Валидация дат
+                const startDate = new Date(document.getElementById('startDate').value);
+                const deadline = new Date(document.getElementById('deadline').value);
+                
+                if (deadline <= startDate) {
+                    e.preventDefault();
+                    alert('Дедлайн должен быть позже даты начала');
+                    return false;
+                }
+                
+                return true;
             });
             
-            if (response.ok) {
-                alert('Проект успешно создан!');
-                switchTab('projects');
-                loadProjects();
-                loadProjectStats();
-                resetProjectForm();
-            } else {
-                const error = await response.json();
-                alert('Ошибка: ' + (error.message || 'Не удалось создать проект'));
-            }
-        } catch (error) {
-            console.error('Ошибка создания проекта:', error);
-            alert('Ошибка создания проекта');
-        }
-    }
-
-    // Валидация формы проекта
-    function validateProjectForm(data) {
-        let isValid = true;
-        
-        // Сброс ошибок
-        document.querySelectorAll('.error-message').forEach(el => {
-            el.style.display = 'none';
-        });
-        document.querySelectorAll('.form-control.error').forEach(el => {
-            el.classList.remove('error');
-        });
-        
-        // Проверка названия
-        if (!data.name || data.name.length < 2) {
-            showError('projectName', 'Название должно содержать минимум 2 символа');
-            isValid = false;
-        }
-        
-        // Проверка дат
-        const startDate = new Date(data.startDate);
-        const deadline = new Date(data.deadline);
-        
-        if (deadline <= startDate) {
-            showError('deadline', 'Дедлайн должен быть позже даты начала');
-            isValid = false;
-        }
-        
-        // Проверка бюджета
-        if (!data.budget || data.budget <= 0) {
-            showError('budget', 'Бюджет должен быть положительным числом');
-            isValid = false;
-        }
-        
-        // Проверка типа проекта
-        if (!data.projectTypeId) {
-            showError('projectType', 'Выберите тип проекта');
-            isValid = false;
-        }
-        
-        // Проверка клиента
-        if (!data.clientId) {
-            showError('clientId', 'Выберите клиента');
-            isValid = false;
-        }
-        
-        return isValid;
-    }
-
-    function showError(fieldId, message) {
-        const field = document.getElementById(fieldId);
-        const errorElement = document.getElementById(fieldId + 'Error');
-        
-        field.classList.add('error');
-        errorElement.textContent = message;
-        errorElement.style.display = 'block';
-    }
-
-    function resetProjectForm() {
-        document.getElementById('projectForm').reset();
-        document.getElementById('startDate').value = new Date().toISOString().split('T')[0];
-        
-        const nextMonth = new Date();
-        nextMonth.setMonth(nextMonth.getMonth() + 1);
-        document.getElementById('deadline').value = nextMonth.toISOString().split('T')[0];
-    }
-
-    // Удаление проекта
-    async function deleteProject(projectId) {
-        if (!confirm('Вы уверены, что хотите удалить этот проект? Все связанные данные будут удалены.')) {
-            return;
-        }
-        
-        try {
-            const response = await fetch(`/api/projects/${projectId}`, {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' }
+            // Кнопка добавления проекта
+            document.getElementById('addProjectBtn')?.addEventListener('click', function() {
+                document.getElementById('addProjectForm').style.display = 'block';
+                window.scrollTo({
+                    top: document.getElementById('addProjectForm').offsetTop - 20,
+                    behavior: 'smooth'
+                });
             });
             
-            const data = await response.json();
-            
-            if (data.success) {
-                alert('Проект успешно удален');
-                loadProjects();
-                loadProjectStats();
-            } else {
-                alert('Ошибка: ' + (data.error || 'Неизвестная ошибка'));
-            }
-        } catch (error) {
-            console.error('Ошибка удаления проекта:', error);
-            alert('Ошибка удаления проекта');
-        }
-    }
-
-    // Редактирование проекта
-    function editProject(projectId) {
-        window.location.href = `/projects/${projectId}/edit`;
-    }
-
-    // Переключение вкладок
-    function switchTab(tabName) {
-        // Скрыть все вкладки
-        document.querySelectorAll('.tab-content').forEach(tab => {
-            tab.classList.remove('active');
-        });
-        
-        // Убрать активный класс со всех кнопок
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.classList.remove('active');
-        });
-        
-        // Показать выбранную вкладку
-        document.getElementById(`${tabName}-tab`).classList.add('active');
-        
-        // Добавить активный класс к выбранной кнопке
-        event.target.classList.add('active');
-        
-        // Загрузить данные для активной вкладки
-        if (tabName === 'projects') {
-            loadProjects();
-            loadProjectStats();
-        } else if (tabName === 'add-project') {
-            loadFormData();
-        }
-    }
-
-    // Функции управления пользователями
-    async function deleteUser(userId) {
-        if (!confirm('Вы уверены, что хотите удалить этого пользователя?')) {
-            return;
-        }
-        
-        try {
-            const response = await fetch(`/api/users/${userId}`, {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' }
+            // Кнопка отмены добавления проекта
+            document.getElementById('cancelBtn')?.addEventListener('click', function() {
+                document.getElementById('addProjectForm').style.display = 'none';
             });
             
-            const data = await response.json();
+            // Обработчики для кнопок удаления проектов
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const projectId = this.getAttribute('data-project-id');
+                    deleteProject(projectId);
+                });
+            });
             
-            if (data.success) {
-                alert('Пользователь успешно удален');
-                location.reload();
-            } else {
-                alert('Ошибка: ' + (data.error || 'Неизвестная ошибка'));
+            // Кнопка закрытия модального окна редактирования
+            document.getElementById('modalCloseBtn')?.addEventListener('click', closeEditModal);
+            document.getElementById('cancelEditBtn')?.addEventListener('click', closeEditModal);
+            
+            // Закрытие модального окна при клике на оверлей
+            const editModal = document.getElementById('editModal');
+            if (editModal) {
+                editModal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        closeEditModal();
+                    }
+                });
             }
-        } catch (error) {
-            console.error('Ошибка удаления:', error);
-            alert('Ошибка удаления пользователя');
-        }
-    }
-
-    async function editUser(userId) {
-        try {
-            const rolesResponse = await fetch('/api/roles');
-            const roles = await rolesResponse.json();
             
-            const modalHtml = `
-                <div class="modal-overlay" id="editModal">
-                    <div class="modal-content">
-                        <h3>Изменение роли пользователя</h3>
-                        <select id="roleSelect" class="modal-select">
-                            ${roles.map(role => `<option value="${role.id}">${role.name}</option>`).join('')}
-                        </select>
-                        <div class="modal-actions">
-                            <button onclick="saveRole(${userId})" class="btn btn-primary">Сохранить</button>
-                            <button onclick="closeModal()" class="btn btn-secondary">Отмена</button>
-                        </div>
-                    </div>
-                </div>
+            // Обработка отправки формы редактирования
+            const editForm = document.getElementById('editProjectForm');
+            if (editForm) {
+                editForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const projectId = document.getElementById('editProjectId').value;
+                    const formData = new FormData(this);
+                    const data = Object.fromEntries(formData.entries());
+                    
+                    // Валидация дат
+                    const startDate = new Date(data.startDate);
+                    const deadline = new Date(data.deadline);
+                    
+                    if (deadline <= startDate) {
+                        alert('Дедлайн должен быть позже даты начала');
+                        return false;
+                    }
+                    
+                    // Преобразование типов данных
+                    data.budget = parseFloat(data.budget);
+                    data.progress = parseInt(data.progress);
+                    data.userId = parseInt(data.userId);
+                    data.projectTypeId = parseInt(data.projectTypeId);
+                    
+                    // Показываем индикатор загрузки
+                    const submitBtn = document.getElementById('editSubmitBtn');
+                    submitBtn.innerHTML = 'Сохранение...';
+                    submitBtn.disabled = true;
+                    
+                    // Отправляем данные
+                    fetch(`/api/projects/${projectId}/edit`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.json().then(err => { 
+                                throw new Error(err.error || 'Ошибка сервера'); 
+                            });
+                        }
+                        return response.json();
+                    })
+                    .then(result => {
+                        if (result.success) {
+                            // Закрываем модальное окно
+                            closeEditModal();
+                            
+                            // Показываем сообщение об успехе
+                            showNotification('Проект успешно обновлен', 'success');
+                            
+                            // Обновляем страницу через 1 секунду
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                        } else {
+                            throw new Error(result.error || 'Неизвестная ошибка');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Ошибка:', error);
+                        alert('Ошибка обновления проекта: ' + error.message);
+                        
+                        // Восстанавливаем кнопку
+                        submitBtn.innerHTML = `
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13.3333 4L5.99996 11.3333L2.66663 8" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Сохранить изменения
+                        `;
+                        submitBtn.disabled = false;
+                    });
+                });
+            }
+        });
+        
+        // Функция удаления проекта
+        function deleteProject(projectId) {
+            if (confirm('Вы уверены, что хотите удалить проект?')) {
+                fetch(`/projects/${projectId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Ошибка сети');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        alert('Проект успешно удален');
+                        location.reload();
+                    } else {
+                        alert('Ошибка при удалении проекта: ' + (data.error || 'Неизвестная ошибка'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                    alert('Ошибка при удалении проекта');
+                });
+            }
+        }
+        
+        // Функция закрытия модального окна редактирования
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Функция показа уведомления
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                ${message}
+                <button onclick="this.parentElement.remove()" style="margin-left: 15px; background: none; border: none; color: white; cursor: pointer; font-weight: bold;">×</button>
             `;
             
-            const modalContainer = document.createElement('div');
-            modalContainer.innerHTML = modalHtml;
-            document.body.appendChild(modalContainer);
-        } catch (error) {
-            console.error('Ошибка загрузки ролей:', error);
-            alert('Ошибка загрузки списка ролей');
-        }
-    }
-
-    async function saveRole(userId) {
-        const roleSelect = document.getElementById('roleSelect');
-        const roleId = roleSelect.value;
-        
-        try {
-            const response = await fetch(`/api/users/${userId}/role`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ roleId: parseInt(roleId) })
-            });
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#4CAF50' : '#f44336'};
+                color: white;
+                padding: 15px 25px;
+                border-radius: 8px;
+                z-index: 1001;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                animation: slideIn 0.3s ease-out;
+            `;
             
-            const data = await response.json();
+            document.body.appendChild(notification);
             
-            if (data.success) {
-                alert('Роль успешно изменена');
-                closeModal();
-                location.reload();
-            } else {
-                alert('Ошибка: ' + (data.error || 'Неизвестная ошибка'));
-            }
-        } catch (error) {
-            console.error('Ошибка изменения роли:', error);
-            alert('Ошибка изменения роли');
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 5000);
         }
-    }
-
-    function closeModal() {
-        const modal = document.getElementById('editModal');
-        if (modal) {
-            modal.parentNode.remove();
-        }
-    }
-
-    function refreshUsers() {
-        location.reload();
-    }
-
-    // Вспомогательные функции
-    function getStatusText(status) {
-        const statusMap = {
-            'planned': 'Запланирован',
-            'in_progress': 'В работе',
-            'on_hold': 'На паузе',
-            'completed': 'Завершен',
-            'cancelled': 'Отменен'
-        };
-        return statusMap[status] || status;
-    }
-
-    function formatCurrency(amount) {
-        return new Intl.NumberFormat('ru-RU', {
-            style: 'currency',
-            currency: 'RUB',
-            minimumFractionDigits: 0
-        }).format(amount);
-    }
-
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('ru-RU');
-    }
-
-    // Инициализация при загрузке страницы
-    document.addEventListener('DOMContentLoaded', function() {
-        updateTime();
-        loadProjectStats();
-        
-        // Если активна вкладка проектов, загрузить их
-        if (document.getElementById('projects-tab').classList.contains('active')) {
-            loadProjects();
-        }
-        
-        // Если активна вкладка добавления проекта, загрузить данные формы
-        if (document.getElementById('add-project-tab').classList.contains('active')) {
-            loadFormData();
-        }
-    });
-
-    // Закрытие модального окна при клике вне его
-    document.addEventListener('click', function(event) {
-        const modal = document.getElementById('editModal');
-        if (modal && event.target === modal) {
-            closeModal();
-        }
-    });
     </script>
 </body>
 </html>

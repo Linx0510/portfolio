@@ -13,7 +13,7 @@
 <body>
     <aside>
         <div class="logo">
-            <h1>LINX</h1>
+            <h1>LINX</h1>       
         </div>
 
         <div class="nav-section" style="gap: 20px;">
@@ -30,8 +30,8 @@
                     </div>
                 </div>
                 <% if (locals.user.role === 'Пользователь') { %>
-                    <a href="/profile" class="nav-link">
-                    <span>ПРОФИЛЬ</span>
+                    <a href="/user-dashboard" class="nav-link">
+                    <span>ПРОЕКТЫ</span>
                 </a>
                 <% } %>
                 <% if (locals.user.role === 'Админ') { %>
@@ -56,24 +56,6 @@
         </div>
         
 
-
-        <div class="nav-section">
-            <a href="/" class="nav-link">
-                <span>ГЛАВНАЯ</span>
-            </a>
-            <a href="/about" class="nav-link">
-                <span>ОБО МНЕ</span>
-            </a>
-            <a href="/services" class="nav-link">
-                <span>УСЛУГИ</span>
-            </a>
-            <a href="/works" class="nav-link">
-                <span>РАБОТЫ</span>
-            </a>
-        </div>
-        
-        
-        
         
         <div class="contacts-section">
             <a href="tel:+79878721968" class="nav-link-contact">
