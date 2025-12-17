@@ -1,0 +1,195 @@
+<div class="admin-content">
+    <div class="content-header">
+        <h1><i class="fas fa-cogs"></i> Админ-панель</h1>
+        <p>Управление системой</p>
+    </div>
+    
+    <div class="admin-stats">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Пользователи</h3>
+                <div class="stat-value" id="totalUsers">Загрузка...</div>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-project-diagram"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Проекты</h3>
+                <div class="stat-value" id="totalProjects">Загрузка...</div>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Бюджет</h3>
+                <div class="stat-value" id="totalBudget">Загрузка...</div>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Активные</h3>
+                <div class="stat-value" id="activeProjects">Загрузка...</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="admin-sections">
+    <div class="admin-section">
+        <h2><i class="fas fa-users"></i> Быстрый доступ</h2>
+        <div class="quick-links">
+            <a href="/admin/users" class="quick-link">
+                <i class="fas fa-user-cog"></i>
+                <span>Управление пользователями</span>
+            </a>
+            <a href="/admin/projects" class="quick-link">
+                <i class="fas fa-project-diagram"></i>
+                <span>Управление проектами</span>
+            </a>
+            <a href="/admin/projects/add" class="quick-link">
+                <i class="fas fa-plus-circle"></i>
+                <span>Создать новый проект</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+<script>
+    // Загружаем статистику при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function() {
+        loadStats();
+        
+        // Обработчик кнопки обновления
+        document.getElementById('refreshStats').addEventListener('click', function(e) {
+            e.preventDefault();
+            loadStats();
+            showNotification('Статистика обновлена', 'success');
+        });
+    });
+    
+    function loadStats() {
+        fetch('/api/admin/stats')
+            .then(response => response.json())
+            .then(data => {
+                // Обновляем значения статистики
+                document.getElementById('totalUsers').textContent = data.totalUsers;
+                document.getElementById('totalProjects').textContent = data.totalProjects;
+                document.getElementById('activeProjects').textContent = data.activeProjects;
+                
+                // Форматируем бюджет
+                const budget = data.totalBudget || 0;
+                document.getElementById('totalBudget').textContent = 
+                    new Intl.NumberFormat('ru-RU', {
+                        style: 'currency',
+                        currency: 'RUB',
+                        minimumFractionDigits: 0
+                    }).format(budget);
+                
+                // Создаем график
+                createChart(data);
+            })
+            .catch(error => {
+                console.error('Ошибка загрузки статистики:', error);
+                showNotification('Ошибка загрузки статистики', 'error');
+            });
+    }
+    
+    function createChart(data) {
+        const container = document.getElementById('statsChart');
+        
+        // Простой график на CSS
+        container.innerHTML = `
+            <div class="chart-container">
+                <div class="chart-bars">
+                    ${data.projectsByStatus ? data.projectsByStatus.map(item => `
+                        <div class="chart-bar-group">
+                            <div class="chart-bar" style="height: ${(item.count / data.totalProjects) * 150}px"></div>
+                            <div class="chart-label">${getStatusLabel(item.status)}</div>
+                            <div class="chart-value">${item.count}</div>
+                        </div>
+                    `).join('') : ''}
+                </div>
+            </div>
+        `;
+        
+        // Добавляем стили
+        const style = document.createElement('style');
+        style.textContent = `
+            .chart-container {
+                padding: 20px;
+            }
+            
+            .chart-bars {
+                display: flex;
+                justify-content: space-around;
+                align-items: flex-end;
+                height: 200px;
+                border-bottom: 2px solid #e2e8f0;
+                position: relative;
+            }
+            
+            .chart-bar-group {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .chart-bar {
+                width: 40px;
+                background: linear-gradient(to top, #4f46e5, #7c3aed);
+                border-radius: 6px 6px 0 0;
+                transition: height 0.5s ease;
+            }
+            
+            .chart-label {
+                font-size: 0.85rem;
+                color: #64748b;
+                text-align: center;
+                max-width: 80px;
+                word-wrap: break-word;
+            }
+            
+            .chart-value {
+                font-weight: 600;
+                color: #1e293b;
+            }
+        `;
+        container.appendChild(style);
+    }
+    
+    function getStatusLabel(status) {
+        const labels = {
+            'planned': 'Запланирован',
+            'in_progress': 'В работе',
+            'on_hold': 'На паузе',
+            'completed': 'Завершен',
+            'cancelled': 'Отменен'
+        };
+        return labels[status] || status;
+    }
+    
+    function showNotification(message, type) {
+        // Используйте вашу существующую функцию уведомлений
+        if (typeof window.showNotification === 'function') {
+            window.showNotification(message, type === 'error' ? 'error' : 'success');
+        } else {
+            alert(message);
+        }
+    }
+</script>

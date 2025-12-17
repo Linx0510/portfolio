@@ -76,12 +76,12 @@ main{
     height: 100vh;
     background-image: url(bg_main.svg);
     object-fit: cover;
-    padding: 20px 40px;
+    padding: 0px 40px;
     align-items: center;
 }
 nav{
     display: flex;
-    padding:  0 40px;
+    padding:  30px 40px 0px 40px;
     width: 100%;
     align-items: center;
     justify-content: space-between;
